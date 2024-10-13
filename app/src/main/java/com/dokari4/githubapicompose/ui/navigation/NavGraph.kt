@@ -7,7 +7,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.dokari4.githubapicompose.ui.components.BottomNavItem
-import com.dokari4.githubapicompose.ui.home.HomeDestination
 import com.dokari4.githubapicompose.ui.home.HomeScreen
 
 @Composable
@@ -17,16 +16,16 @@ fun AppNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = BottomNavItem.Home.route,
+        startDestination = Routes.HOME_SCREEN,
         modifier = modifier
     ) {
-        composable(route = BottomNavItem.Home.route) {
+        composable(route = Routes.HOME_SCREEN) {
             HomeScreen()
         }
-        composable(route = BottomNavItem.Search.route) {
+        composable(route = Routes.SEARCH_SCREEN) {
             Text("This is Search Screen")
         }
-        composable(route = BottomNavItem.Setting.route) {
+        composable(route = Routes.SETTING_SCREEN) {
             Text("This is Setting Screen")
         }
     }
