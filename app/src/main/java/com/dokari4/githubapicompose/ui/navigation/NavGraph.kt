@@ -8,11 +8,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.dokari4.githubapicompose.ui.components.BottomNavItem
 import com.dokari4.githubapicompose.ui.home.HomeScreen
+import com.dokari4.githubapicompose.ui.home.HomeViewModel
 
 @Composable
 fun AppNavHost(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel
 ) {
     NavHost(
         navController = navController,
@@ -20,7 +22,7 @@ fun AppNavHost(
         modifier = modifier
     ) {
         composable(route = Routes.HOME_SCREEN) {
-            HomeScreen()
+            HomeScreen(viewModel = viewModel)
         }
         composable(route = Routes.SEARCH_SCREEN) {
             Text("This is Search Screen")

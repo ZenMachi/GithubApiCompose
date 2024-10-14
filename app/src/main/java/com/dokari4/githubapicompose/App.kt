@@ -22,13 +22,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.dokari4.githubapicompose.ui.components.BottomNavItem
 import com.dokari4.githubapicompose.ui.components.BottomNavigationBar
+import com.dokari4.githubapicompose.ui.home.HomeViewModel
 import com.dokari4.githubapicompose.ui.navigation.AppNavHost
 import com.dokari4.githubapicompose.ui.navigation.Routes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun App(navController: NavHostController = rememberNavController()) {
+fun App(navController: NavHostController = rememberNavController(), viewModel: HomeViewModel) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
@@ -61,6 +62,7 @@ fun App(navController: NavHostController = rememberNavController()) {
     )
 
     Scaffold(
+        snackbarHost = {  },
         topBar = {
             TopAppBar(title = { Text(text = title) })
         },
@@ -69,7 +71,7 @@ fun App(navController: NavHostController = rememberNavController()) {
         }
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
-            AppNavHost(navController = navController)
+            AppNavHost(navController = navController, viewModel = viewModel)
         }
     }
 }

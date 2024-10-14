@@ -49,3 +49,10 @@ private fun BottomNavbarIcon(
     )
 }
 
+data class BottomNavItem(
+    val route: String,
+    val selectedIcon: ImageVector,
+    val unselectedIcon: ImageVector,
+    val title: String
+)
+
