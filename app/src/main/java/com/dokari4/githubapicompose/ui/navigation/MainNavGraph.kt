@@ -12,6 +12,7 @@ import com.dokari4.githubapicompose.ui.detail.DetailScreen
 import com.dokari4.githubapicompose.ui.home.HomeScreen
 import com.dokari4.githubapicompose.ui.home.HomeViewModel
 import com.dokari4.githubapicompose.ui.search.SearchScreen
+import kotlinx.serialization.Serializable
 
 @Composable
 fun MainNavGraph(
@@ -22,18 +23,18 @@ fun MainNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Routes.MainScreen.HomeScreen.route,
+        startDestination = Routes.MainScreen.HomeScreen,
         modifier = modifier
     ) {
-        composable(route = Routes.MainScreen.HomeScreen.route) {
+        composable<Routes.MainScreen.HomeScreen> {
             HomeScreen(
                 viewModel = viewModel,
-                onCardClick = { rootNavController.navigate(Routes.DetailScreen.route) })
+                onCardClick = { rootNavController.navigate(Routes.DetailScreen(it)) })
         }
-        composable(route = Routes.MainScreen.SearchScreen.route) {
+        composable<Routes.MainScreen.SearchScreen> {
             SearchScreen()
         }
-        composable(route = Routes.MainScreen.SettingScreen.route) {
+        composable<Routes.MainScreen.SettingScreen> {
             Text("This is Setting Screen")
         }
     }

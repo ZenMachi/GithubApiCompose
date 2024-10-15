@@ -50,7 +50,7 @@ private fun BottomNavbarIcon(
 }
 
 data class BottomNavItem(
-    val route: String,
+    val route: Any,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
     val title: String

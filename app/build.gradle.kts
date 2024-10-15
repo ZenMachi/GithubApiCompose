@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.parcelize)
+    kotlin("plugin.serialization") version "2.0.20"
 }
 
 android {
@@ -54,6 +55,9 @@ dependencies {
 
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.navigation.compose)
+
+    //Kotlin Serializable
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 
     // Retrofit for API requests
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")

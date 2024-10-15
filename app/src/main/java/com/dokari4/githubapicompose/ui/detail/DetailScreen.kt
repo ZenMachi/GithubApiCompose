@@ -11,10 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun DetailScreen() {
+fun DetailScreen(
+    modifier: Modifier = Modifier,
+    username: String
+) {
     Scaffold { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
-            Row { Text("This is Detail Screen") }
+            Row { Text("This is Detail Screen: $username") }
         }
     }
 }

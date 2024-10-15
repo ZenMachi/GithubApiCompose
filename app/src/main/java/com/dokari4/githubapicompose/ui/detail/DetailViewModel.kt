@@ -1,54 +1,47 @@
-package com.dokari4.githubapicompose.ui.home
+package com.dokari4.githubapicompose.ui.detail
 
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dokari4.githubapicompose.data.Repository
+import com.dokari4.githubapicompose.data.remote.dto.DetailUserDto
 import com.dokari4.githubapicompose.data.remote.network.ApiResponse
-import com.dokari4.githubapicompose.data.remote.dto.UserDto
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
+class DetailViewModel: ViewModel() {
     private val repository = Repository()
 
-    private val _users = MutableStateFlow(HomeUiState())
-    val users = _users.asStateFlow()
+    private val _state = MutableStateFlow(DetailUiState())
+    val state = _state.asStateFlow()
 
-    var listState = LazyListState()
-
-    fun getUsers() {
+    fun getDetailUser(username: String) {
         viewModelScope.launch {
-            when (val response = repository.getUsers()) {
+            when (val response = repository.getDetailUser(username)) {
                 is ApiResponse.Empty -> {
-                    _users.value = HomeUiState(
-                        user = emptyList(),
+                    _state.value = DetailUiState(
                         isLoading = true,
                     )
                 }
                 is ApiResponse.Error -> {
-                    _users.value = HomeUiState(
-                        user = emptyList(),
+                    _state.value = DetailUiState(
                         isLoading = false,
                         errorMessage = response.errorMessage
                     )
                 }
-
                 is ApiResponse.Success -> {
-                    _users.value = HomeUiState(
-                        user = response.data,
+                    _state.value = DetailUiState(
+                        data = response.data,
                         isLoading = false,
                     )
                 }
             }
         }
-
     }
 }
 
-data class HomeUiState(
-    val user: List<UserDto> = emptyList(),
+data class DetailUiState(
+    val data: DetailUserDto? = null,
     val errorMessage: String = "",
     val isLoading: Boolean = true
 )

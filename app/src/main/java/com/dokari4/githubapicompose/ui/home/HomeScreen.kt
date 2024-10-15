@@ -8,9 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -20,7 +17,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,8 +24,9 @@ import androidx.compose.ui.unit.dp
 import com.dokari4.githubapicompose.data.remote.dto.UserDto
 import com.dokari4.githubapicompose.ui.components.CardItem
 import com.dokari4.githubapicompose.ui.components.ShowProgressBar
+import com.dokari4.githubapicompose.ui.components.SnackbarController
+import com.dokari4.githubapicompose.ui.components.SnackbarEvent
 import com.dokari4.githubapicompose.ui.theme.GithubApiComposeTheme
-import kotlinx.coroutines.launch
 
 val dummyData = UserDto(
     id = 0,
@@ -43,11 +40,12 @@ val dummyData = UserDto(
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel,
-    onCardClick: () -> Unit
+    onCardClick: (String) -> Unit
 ) {
     val users by viewModel.users.collectAsState()
 
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     var text by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
@@ -57,41 +55,32 @@ fun HomeScreen(
     Column {
         if (users.isLoading) ShowProgressBar()
         if (users.errorMessage.isNotEmpty()) {
-            ShowSnackBar(message = users.errorMessage)
+//            Toast.makeText(context, users.errorMessage, Toast.LENGTH_SHORT).show()
+            LaunchedEffect(Unit) {
+                SnackbarController.sendEvent(
+                    event = SnackbarEvent(
+                        message = users.errorMessage,
+                        action = null
+                    )
+                )
+            }
         }
         LazyColumn(
             state = viewModel.listState,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(users.userDtos) {
+            items(users.user) {
                 CardItem(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth()
-                        .clickable(onClick = onCardClick),
+                        .clickable(onClick = { onCardClick(it.idName) }),
                     data = it
                 )
             }
         }
     }
 }
-
-@Composable
-fun ShowSnackBar(align: Alignment = Alignment.BottomCenter, message: String) {
-    val snackbarHostState = remember { SnackbarHostState() }
-    val coroutineScope = rememberCoroutineScope()
-
-    SnackbarHost(hostState = snackbarHostState, modifier = Modifier) {
-        Snackbar(it)
-    }
-
-    LaunchedEffect(Unit) {
-        coroutineScope.launch {
-            snackbarHostState.showSnackbar(message)
-        }
-    }
-}
-
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {

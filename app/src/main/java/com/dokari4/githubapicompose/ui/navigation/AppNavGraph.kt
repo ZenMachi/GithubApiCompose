@@ -8,11 +8,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import androidx.navigation.toRoute
 import com.dokari4.githubapicompose.MainScreen
 import com.dokari4.githubapicompose.ui.detail.DetailScreen
 import com.dokari4.githubapicompose.ui.home.HomeScreen
 import com.dokari4.githubapicompose.ui.home.HomeViewModel
 import com.dokari4.githubapicompose.ui.search.SearchScreen
+import kotlinx.serialization.Serializable
 
 @Composable
 fun AppNavGraph(
@@ -22,16 +24,17 @@ fun AppNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Routes.MainScreen.route,
+        startDestination = Routes.MainScreen,
         modifier = modifier
     ) {
 
-        composable(route = Routes.MainScreen.route) {
+        composable<Routes.MainScreen> {
             MainScreen(viewModel = viewModel, rootNavController = navController)
         }
 
-        composable(route = Routes.DetailScreen.route) {
-            DetailScreen()
+        composable<Routes.DetailScreen> {
+            val args = it.toRoute<Routes.DetailScreen>()
+            DetailScreen(username = args.username)
         }
     }
 }
