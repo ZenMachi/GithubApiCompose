@@ -44,13 +44,19 @@ fun MainScreen(
     viewModel: HomeViewModel
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
+    val currentDestination = navBackStackEntry?.destination
 
-    val title = when (currentRoute) {
-        Routes.MainScreen.HomeScreen.route -> "Home"
-        Routes.MainScreen.SearchScreen.route -> "Search"
-        Routes.MainScreen.SettingScreen.route -> "Setting"
-        else -> ""
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+
+    val title = currentDestination?.let {
+        when (it.route) {
+            Routes.MainScreen.HomeScreen::class.qualifiedName -> "Home"
+            Routes.MainScreen.SearchScreen::class.qualifiedName -> "Search"
+            Routes.MainScreen.SettingScreen::class.qualifiedName -> "Settings"
+            else -> "Other"
+        }
     }
 
     val listOfBottomNavItem = listOf(
@@ -73,8 +79,6 @@ fun MainScreen(
             title = "Setting"
         )
     )
-    val scope = rememberCoroutineScope()
-    val snackbarHostState = remember { SnackbarHostState() }
 
     ObserveAsEvents(
         flow = SnackbarController.events,
@@ -98,7 +102,7 @@ fun MainScreen(
             SnackbarHost(hostState = snackbarHostState)
         },
         topBar = {
-            TopAppBar(title = { Text(text = title) })
+            TopAppBar(title = { Text(text = title.toString()) })
         },
         bottomBar = {
             BottomNavigationBar(listOfBottomNavItem, navController)
@@ -108,7 +112,7 @@ fun MainScreen(
             MainNavGraph(
                 navController = navController,
                 rootNavController = rootNavController,
-                viewModel = viewModel
+                homeViewModel = viewModel
             )
         }
     }

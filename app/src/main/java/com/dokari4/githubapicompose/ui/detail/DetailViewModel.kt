@@ -17,7 +17,7 @@ class DetailViewModel: ViewModel() {
 
     fun getDetailUser(username: String) {
         viewModelScope.launch {
-            when (val response = repository.getDetailUser(username)) {
+            when (val response = repository.fetchDetailUser(username)) {
                 is ApiResponse.Empty -> {
                     _state.value = DetailUiState(
                         isLoading = true,

@@ -6,20 +6,16 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
-import com.dokari4.githubapicompose.MainScreen
-import com.dokari4.githubapicompose.ui.detail.DetailScreen
 import com.dokari4.githubapicompose.ui.home.HomeScreen
 import com.dokari4.githubapicompose.ui.home.HomeViewModel
 import com.dokari4.githubapicompose.ui.search.SearchScreen
-import kotlinx.serialization.Serializable
 
 @Composable
 fun MainNavGraph(
     navController: NavHostController,
     rootNavController: NavHostController,
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel
+    homeViewModel: HomeViewModel
 ) {
     NavHost(
         navController = navController,
@@ -28,7 +24,7 @@ fun MainNavGraph(
     ) {
         composable<Routes.MainScreen.HomeScreen> {
             HomeScreen(
-                viewModel = viewModel,
+                viewModel = homeViewModel,
                 onCardClick = { rootNavController.navigate(Routes.DetailScreen(it)) })
         }
         composable<Routes.MainScreen.SearchScreen> {

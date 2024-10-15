@@ -25,7 +25,7 @@ class Repository {
         }
     }
 
-    suspend fun getDetailUser(username: String): ApiResponse<DetailUserDto> {
+    suspend fun fetchDetailUser(username: String): ApiResponse<DetailUserDto> {
          try {
             val response = apiService.getUserDetail(username)
             return ApiResponse.Success(response)

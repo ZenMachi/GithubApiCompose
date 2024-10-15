@@ -9,13 +9,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.rememberNavController
+import com.dokari4.githubapicompose.ui.detail.DetailViewModel
 import com.dokari4.githubapicompose.ui.home.HomeViewModel
 import com.dokari4.githubapicompose.ui.navigation.AppNavGraph
 import com.dokari4.githubapicompose.ui.theme.GithubApiComposeTheme
 
 class MainActivity : ComponentActivity() {
-    private val viewModel: HomeViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels()
+    private val detailViewModel: DetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +27,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AppNavGraph(viewModel = viewModel)
+                    AppNavGraph(homeViewModel = homeViewModel, detailViewModel = detailViewModel)
                 }
             }
         }
