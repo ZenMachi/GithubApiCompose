@@ -1,7 +1,12 @@
 package com.dokari4.githubapicompose.ui.navigation
 
-object Routes {
-    const val HOME_SCREEN: String = "home"
-    const val SEARCH_SCREEN: String = "search"
-    const val SETTING_SCREEN: String = "setting"
+
+sealed class Routes(val route: String) {
+    data object MainScreen : Routes("main") {
+        data object HomeScreen : Routes("home")
+        data object SearchScreen : Routes("search")
+        data object SettingScreen : Routes("setting")
+    }
+    data object DetailScreen : Routes("detail")
+
 }

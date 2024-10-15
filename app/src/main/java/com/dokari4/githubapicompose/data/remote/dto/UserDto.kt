@@ -1,8 +1,8 @@
-package com.dokari4.githubapicompose.data.remote.response
+package com.dokari4.githubapicompose.data.remote.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class UsersItem(
+data class UserDto(
     @field:SerializedName("id")
     val id: Int,
     @field:SerializedName("avatar_url")

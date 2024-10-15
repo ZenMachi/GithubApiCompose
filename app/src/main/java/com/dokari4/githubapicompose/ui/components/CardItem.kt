@@ -15,10 +15,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.dokari4.githubapicompose.R
-import com.dokari4.githubapicompose.data.remote.response.UsersItem
+import com.dokari4.githubapicompose.data.remote.dto.UserDto
 
 @Composable
-fun CardItem(modifier: Modifier = Modifier, data: UsersItem) {
+fun CardItem(modifier: Modifier = Modifier, data: UserDto) {
 
     Card(
         modifier = modifier

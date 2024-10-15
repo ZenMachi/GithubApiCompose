@@ -6,29 +6,32 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.dokari4.githubapicompose.ui.components.BottomNavItem
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
+import com.dokari4.githubapicompose.MainScreen
+import com.dokari4.githubapicompose.ui.detail.DetailScreen
 import com.dokari4.githubapicompose.ui.home.HomeScreen
 import com.dokari4.githubapicompose.ui.home.HomeViewModel
+import com.dokari4.githubapicompose.ui.search.SearchScreen
 
 @Composable
-fun AppNavHost(
-    navController: NavHostController,
+fun AppNavGraph(
+    navController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel
 ) {
     NavHost(
         navController = navController,
-        startDestination = Routes.HOME_SCREEN,
+        startDestination = Routes.MainScreen.route,
         modifier = modifier
     ) {
-        composable(route = Routes.HOME_SCREEN) {
-            HomeScreen(viewModel = viewModel)
+
+        composable(route = Routes.MainScreen.route) {
+            MainScreen(viewModel = viewModel, rootNavController = navController)
         }
-        composable(route = Routes.SEARCH_SCREEN) {
-            Text("This is Search Screen")
-        }
-        composable(route = Routes.SETTING_SCREEN) {
-            Text("This is Setting Screen")
+
+        composable(route = Routes.DetailScreen.route) {
+            DetailScreen()
         }
     }
 }

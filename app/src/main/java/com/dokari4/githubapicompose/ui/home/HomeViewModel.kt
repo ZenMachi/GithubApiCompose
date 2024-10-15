@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dokari4.githubapicompose.data.Repository
 import com.dokari4.githubapicompose.data.remote.network.ApiResponse
-import com.dokari4.githubapicompose.data.remote.response.UsersItem
+import com.dokari4.githubapicompose.data.remote.dto.UserDto
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -23,14 +23,13 @@ class HomeViewModel : ViewModel() {
             when (val response = repository.getUsers()) {
                 is ApiResponse.Empty -> {
                     _users.value = HomeUiState(
-                        users = emptyList(),
+                        userDtos = emptyList(),
                         isLoading = true,
-                        errorMessage = ""
                     )
                 }
                 is ApiResponse.Error -> {
                     _users.value = HomeUiState(
-                        users = emptyList(),
+                        userDtos = emptyList(),
                         isLoading = false,
                         errorMessage = response.errorMessage
                     )
@@ -38,9 +37,8 @@ class HomeViewModel : ViewModel() {
 
                 is ApiResponse.Success -> {
                     _users.value = HomeUiState(
-                        users = response.data,
+                        userDtos = response.data,
                         isLoading = false,
-                        errorMessage = ""
                     )
                 }
             }
@@ -50,7 +48,7 @@ class HomeViewModel : ViewModel() {
 }
 
 data class HomeUiState(
-    val users: List<UsersItem> = emptyList(),
-    val isLoading: Boolean = true,
-    val errorMessage: String = ""
+    val userDtos: List<UserDto> = emptyList(),
+    val errorMessage: String = "",
+    val isLoading: Boolean = true
 )
