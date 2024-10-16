@@ -13,14 +13,14 @@ import kotlinx.coroutines.launch
 class HomeViewModel : ViewModel() {
     private val repository = Repository()
 
-    private val _users = MutableStateFlow(HomeUiState())
+    private val _users = MutableStateFlow(HomeScreenState())
     val users = _users.asStateFlow()
 
     var listState = LazyListState()
 
     fun getUsers() {
         viewModelScope.launch {
-            val response = repository.getUsers()
+            val response = repository.fetchUsers()
             response.collect {
                 handleState(it)
             }
@@ -30,26 +30,26 @@ class HomeViewModel : ViewModel() {
     private fun handleState(response: ApiResponse<List<UserDto>>) {
         when (response) {
             ApiResponse.Loading -> {
-                _users.value = HomeUiState(
+                _users.value = HomeScreenState(
                     user = emptyList(),
                     isLoading = true,
                 )
             }
             is ApiResponse.Empty -> {
-                _users.value = HomeUiState(
+                _users.value = HomeScreenState(
                     user = emptyList(),
                     isLoading = false,
                 )
             }
             is ApiResponse.Error -> {
-                _users.value = HomeUiState(
+                _users.value = HomeScreenState(
                     user = emptyList(),
                     isLoading = false,
                     errorMessage = response.errorMessage
                 )
             }
             is ApiResponse.Success -> {
-                _users.value = HomeUiState(
+                _users.value = HomeScreenState(
                     user = response.data,
                     isLoading = false,
                 )
@@ -58,7 +58,7 @@ class HomeViewModel : ViewModel() {
     }
 }
 
-data class HomeUiState(
+data class HomeScreenState(
     val user: List<UserDto> = emptyList(),
     val errorMessage: String = "",
     val isLoading: Boolean = true

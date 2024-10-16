@@ -20,7 +20,7 @@ class Repository {
 
         On Repo must be only catch Throwable
     */
-    fun getUsers(): Flow<ApiResponse<List<UserDto>>> {
+    fun fetchUsers(): Flow<ApiResponse<List<UserDto>>> {
         return flow {
             emit(ApiResponse.Loading)
             val response = apiService.getUsers()
@@ -55,7 +55,7 @@ class Repository {
         }
     }
 
-    suspend fun fetchDetailUser(username: String): Flow<ApiResponse<DetailUserDto>> {
+    fun fetchDetailUser(username: String): Flow<ApiResponse<DetailUserDto>> {
         return flow {
             emit(ApiResponse.Loading)
             val response = apiService.getUserDetail(username)
@@ -83,7 +83,75 @@ class Repository {
                 }
             }
         }
+    }
 
+    fun fetchFollowers(username: String): Flow<ApiResponse<List<UserDto>>> {
+        return flow {
+            emit(ApiResponse.Loading)
+            val response = apiService.getFollowers(username)
 
+            if (response.isNotEmpty()) {
+                emit(ApiResponse.Success(response))
+            } else {
+                emit(ApiResponse.Empty)
+            }
+        }.catch { e ->
+            when (e) {
+                is HttpException -> {
+                    when (e.code()) {
+                        403 -> {
+                            Log.d("Repository", "getUsers: ${e.message}")
+                            emit(ApiResponse.Error(e.message.toString()))
+                        }
+                    }
+                }
+
+                is Exception -> {
+                    e.printStackTrace()
+                    Log.d("Repository", "getUsers: ${e.message}")
+                    emit(ApiResponse.Error(e.message.toString()))
+                }
+
+                else -> {
+                    Log.d("Repository", "getUsers: ${e.message}")
+                    emit(ApiResponse.Error(e.message.toString()))
+                }
+            }
+        }
+    }
+
+    fun fetchFollowing(username: String): Flow<ApiResponse<List<UserDto>>> {
+        return flow {
+            emit(ApiResponse.Loading)
+            val response = apiService.getFollowing(username)
+
+            if (response.isNotEmpty()) {
+                emit(ApiResponse.Success(response))
+            } else {
+                emit(ApiResponse.Empty)
+            }
+        }.catch { e ->
+            when (e) {
+                is HttpException -> {
+                    when (e.code()) {
+                        403 -> {
+                            Log.d("Repository", "getUsers: ${e.message}")
+                            emit(ApiResponse.Error(e.message.toString()))
+                        }
+                    }
+                }
+
+                is Exception -> {
+                    e.printStackTrace()
+                    Log.d("Repository", "getUsers: ${e.message}")
+                    emit(ApiResponse.Error(e.message.toString()))
+                }
+
+                else -> {
+                    Log.d("Repository", "getUsers: ${e.message}")
+                    emit(ApiResponse.Error(e.message.toString()))
+                }
+            }
+        }
     }
 }

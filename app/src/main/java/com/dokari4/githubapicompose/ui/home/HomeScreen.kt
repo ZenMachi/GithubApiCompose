@@ -68,7 +68,6 @@ fun HomeScreen(
             }
         }
         LazyColumn(
-            state = rememberLazyListState(),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(users.user) {
@@ -81,18 +80,6 @@ fun HomeScreen(
                 )
             }
         }
-    }
-}
-
-@Composable
-fun rememberLazyListState(
-    initialFirstVisibleItemIndex: Int = 0,
-    initialFirstVisibleItemScrollOffset: Int = 0
-): LazyListState {
-    return rememberSaveable(saver = LazyListState.Saver) {
-        LazyListState(
-            initialFirstVisibleItemIndex, initialFirstVisibleItemScrollOffset
-        )
     }
 }
 

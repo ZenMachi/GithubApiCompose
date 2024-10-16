@@ -1,6 +1,5 @@
 package com.dokari4.githubapicompose.ui.detail
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +10,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -20,23 +23,29 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.dokari4.githubapicompose.R
+import com.dokari4.githubapicompose.ui.components.CardItem
 import com.dokari4.githubapicompose.ui.components.ShowProgressBar
+import com.dokari4.githubapicompose.ui.components.StatsItem
 import com.dokari4.githubapicompose.utils.formatNumber
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,7 +60,7 @@ fun DetailScreen(
     LaunchedEffect(Unit) {
         viewModel.getDetailUser(username)
     }
-    if (state.isLoading) ShowProgressBar()
+    if (state.isLoadingScreen) ShowProgressBar()
 
     if (state.data != null) {
         Scaffold(
@@ -74,7 +83,6 @@ fun DetailScreen(
             Column(
                 modifier = Modifier
                     .padding(innerPadding)
-                    .padding(horizontal = 16.dp)
                     .fillMaxSize()
             ) {
                 ProfileBar(
@@ -89,20 +97,120 @@ fun DetailScreen(
                     Bio(bio = state.data?.bio!!)
                     Spacer(modifier = Modifier.height(16.dp))
                 }
+                FollowTabRow(username, viewModel, state)
             }
         }
     }
 }
 
 @Composable
+private fun FollowTabRow(
+    username: String,
+    viewModel: DetailViewModel,
+    state: DetailScreenState
+) {
+    var selectedTabIndex by remember { mutableIntStateOf(0) }
+
+    val tabs = listOf(
+        TabItem("Followers"),
+        TabItem("Following")
+    )
+
+    val pagerState = rememberPagerState {
+        tabs.size
+    }
+
+    LaunchedEffect(selectedTabIndex) {
+        pagerState.animateScrollToPage(selectedTabIndex)
+    }
+
+    LaunchedEffect(pagerState.currentPage, pagerState.isScrollInProgress) {
+        if (!pagerState.isScrollInProgress) {
+            selectedTabIndex = pagerState.currentPage
+        }
+    }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        TabRow(
+            selectedTabIndex = selectedTabIndex
+        ) {
+            tabs.forEachIndexed { index, tab ->
+                Tab(
+                    text = { Text(tab.title) },
+                    selected = index == selectedTabIndex,
+                    onClick = { selectedTabIndex = index }
+                )
+            }
+        }
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.fillMaxWidth()
+        ) { index ->
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                when (index) {
+                    0 -> {
+                        LaunchedEffect(Unit) {
+                            viewModel.getFollowersUser(username)
+                        }
+
+                        if (state.isLoadingFollowers) ShowProgressBar()
+
+                        LazyColumn(
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            items(state.listFollowers) {
+                                CardItem(
+                                    modifier = Modifier
+                                        .padding(horizontal = 16.dp)
+                                        .fillMaxWidth(),
+                                    data = it
+                                )
+                            }
+                        }
+                    }
+
+                    1 -> {
+                        LaunchedEffect(Unit) {
+                            viewModel.getFollowingUser(username)
+                        }
+
+                        if (state.isLoadingFollowing) ShowProgressBar()
+
+                        LazyColumn(
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            items(state.listFollowing) {
+                                CardItem(
+                                    modifier = Modifier
+                                        .padding(horizontal = 16.dp)
+                                        .fillMaxWidth(),
+                                    data = it
+                                )
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+}
+
+data class TabItem(val title: String)
+
+
+@Composable
 private fun Bio(bio: String) {
-    Text("Bio", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-    Spacer(modifier = Modifier.height(4.dp))
-    Text(bio, style = MaterialTheme.typography.bodyMedium)
+    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+        Text("Bio", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(bio, style = MaterialTheme.typography.bodyMedium)
+    }
 }
 
 @Composable
 private fun ProfileBar(
+    height: Dp = 128.dp,
     photoUrl: String,
     name: String?,
     repoCount: Long,
@@ -111,13 +219,14 @@ private fun ProfileBar(
 ) {
     Row(
         modifier = Modifier
-            .height(128.dp)
+            .height(height)
+            .padding(horizontal = 16.dp)
     ) {
         val placeholder = rememberVectorPainter(Icons.Default.Person)
 
         AsyncImage(
             modifier = Modifier
-                .height(128.dp)
+                .height(height)
                 .clip(RoundedCornerShape(16.dp)),
             contentScale = ContentScale.Fit,
             placeholder = placeholder,
@@ -140,57 +249,19 @@ private fun ProfileBar(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Stats(
+                StatsItem(
                     title = "Repo",
                     count = formatNumber(repoCount)
                 )
-                Stats(
+                StatsItem(
                     title = "Followers",
                     count = formatNumber(followerCount)
                 )
-                Stats(
+                StatsItem(
                     title = "Following",
                     count = formatNumber(followingCount)
                 )
             }
         }
-    }
-}
-
-
-@Composable
-private fun Stats(
-    title: String,
-    count: String
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        TextBox(text = count)
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = title,
-            style = MaterialTheme.typography.labelMedium
-        )
-    }
-}
-
-@Composable
-fun TextBox(
-    text: String,
-) {
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(8.dp))
-            .background(MaterialTheme.colorScheme.primaryContainer)
-            .width(64.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = text,
-            modifier = Modifier.padding(vertical = 4.dp),
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
-            fontWeight = FontWeight.Bold,
-        )
     }
 }
