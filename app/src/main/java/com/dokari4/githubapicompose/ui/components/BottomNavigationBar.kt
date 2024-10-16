@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.dokari4.githubapicompose.ui.navigation.Routes
@@ -24,14 +25,6 @@ fun BottomNavigationBar(items: List<BottomNavItem>, navController: NavHostContro
                 ?.hierarchy
                 ?.any { it.route == item.route::class.qualifiedName } == true
 
-            val logRouteNow = currentDestination?.let {
-                when (it.route) {
-                    Routes.MainScreen.HomeScreen::class.qualifiedName -> "HomeScreen"
-                    Routes.MainScreen.SearchScreen::class.qualifiedName -> "SearchScreen"
-                    Routes.MainScreen.SettingScreen::class.qualifiedName -> "SettingScreen"
-                    else -> "Other"
-                }
-            }
             NavigationBarItem(
                 icon = {
                     BottomNavbarIcon(
@@ -44,8 +37,13 @@ fun BottomNavigationBar(items: List<BottomNavItem>, navController: NavHostContro
                 label = { Text(text = item.title) },
                 selected = isSelected,
                 onClick = {
-                    navController.navigate(item.route)
-                    Log.d("BottomNavigationBar", "BottomNavigationBar: $logRouteNow")
+                    navController.navigate(item.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 }
             )
         }

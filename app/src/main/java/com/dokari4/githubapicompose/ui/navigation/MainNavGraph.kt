@@ -3,6 +3,7 @@ package com.dokari4.githubapicompose.ui.navigation
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -25,7 +26,15 @@ fun MainNavGraph(
         composable<Routes.MainScreen.HomeScreen> {
             HomeScreen(
                 viewModel = homeViewModel,
-                onCardClick = { rootNavController.navigate(Routes.DetailScreen(it)) })
+                onCardClick = {
+                    rootNavController.navigate(Routes.DetailScreen(it)) {
+                        launchSingleTop = true
+                        restoreState = true
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                    }
+                })
         }
         composable<Routes.MainScreen.SearchScreen> {
             SearchScreen()

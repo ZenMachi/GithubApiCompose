@@ -31,7 +31,11 @@ fun AppNavGraph(
 
         composable<Routes.DetailScreen> {
             val args = it.toRoute<Routes.DetailScreen>()
-            DetailScreen(username = args.username, viewModel = detailViewModel)
+            DetailScreen(
+                username = args.username,
+                viewModel = detailViewModel,
+                onBackClick = { navController.popBackStack() }
+            )
         }
     }
 }

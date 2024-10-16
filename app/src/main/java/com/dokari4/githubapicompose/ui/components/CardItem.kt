@@ -32,7 +32,7 @@ fun CardItem(modifier: Modifier = Modifier, data: UserDto) {
                 contentScale = ContentScale.Fit,
                 placeholder = painterResource(R.drawable.ic_launcher_background),
                 model = data.avatar,
-                contentDescription = null
+                contentDescription = "Photo of ${data.idName}"
             )
             Spacer(Modifier.width(8.dp))
             Text(text = data.idName)

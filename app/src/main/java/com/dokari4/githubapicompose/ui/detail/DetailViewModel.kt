@@ -17,24 +17,37 @@ class DetailViewModel: ViewModel() {
 
     fun getDetailUser(username: String) {
         viewModelScope.launch {
-            when (val response = repository.fetchDetailUser(username)) {
-                is ApiResponse.Empty -> {
-                    _state.value = DetailUiState(
-                        isLoading = true,
-                    )
-                }
-                is ApiResponse.Error -> {
-                    _state.value = DetailUiState(
-                        isLoading = false,
-                        errorMessage = response.errorMessage
-                    )
-                }
-                is ApiResponse.Success -> {
-                    _state.value = DetailUiState(
-                        data = response.data,
-                        isLoading = false,
-                    )
-                }
+            val response = repository.fetchDetailUser(username)
+            response.collect {
+                handleState(it)
+            }
+
+        }
+    }
+
+    private fun handleState(result: ApiResponse<DetailUserDto>) {
+        when (result) {
+            ApiResponse.Loading -> {
+                _state.value = DetailUiState(
+                    isLoading = true
+                )
+            }
+            ApiResponse.Empty -> {
+                _state.value = DetailUiState(
+                    isLoading = false,
+                )
+            }
+            is ApiResponse.Error -> {
+                _state.value = DetailUiState(
+                    isLoading = false,
+                    errorMessage = result.errorMessage
+                )
+            }
+            is ApiResponse.Success -> {
+                _state.value = DetailUiState(
+                    data = result.data,
+                    isLoading = false,
+                )
             }
         }
     }

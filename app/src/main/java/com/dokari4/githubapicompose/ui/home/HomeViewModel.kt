@@ -20,30 +20,41 @@ class HomeViewModel : ViewModel() {
 
     fun getUsers() {
         viewModelScope.launch {
-            when (val response = repository.getUsers()) {
-                is ApiResponse.Empty -> {
-                    _users.value = HomeUiState(
-                        user = emptyList(),
-                        isLoading = true,
-                    )
-                }
-                is ApiResponse.Error -> {
-                    _users.value = HomeUiState(
-                        user = emptyList(),
-                        isLoading = false,
-                        errorMessage = response.errorMessage
-                    )
-                }
-
-                is ApiResponse.Success -> {
-                    _users.value = HomeUiState(
-                        user = response.data,
-                        isLoading = false,
-                    )
-                }
+            val response = repository.getUsers()
+            response.collect {
+                handleState(it)
             }
         }
+    }
 
+    private fun handleState(response: ApiResponse<List<UserDto>>) {
+        when (response) {
+            ApiResponse.Loading -> {
+                _users.value = HomeUiState(
+                    user = emptyList(),
+                    isLoading = true,
+                )
+            }
+            is ApiResponse.Empty -> {
+                _users.value = HomeUiState(
+                    user = emptyList(),
+                    isLoading = false,
+                )
+            }
+            is ApiResponse.Error -> {
+                _users.value = HomeUiState(
+                    user = emptyList(),
+                    isLoading = false,
+                    errorMessage = response.errorMessage
+                )
+            }
+            is ApiResponse.Success -> {
+                _users.value = HomeUiState(
+                    user = response.data,
+                    isLoading = false,
+                )
+            }
+        }
     }
 }
 
