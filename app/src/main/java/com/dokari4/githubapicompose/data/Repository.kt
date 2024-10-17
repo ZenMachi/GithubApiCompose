@@ -2,11 +2,9 @@ package com.dokari4.githubapicompose.data
 
 import android.util.Log
 import com.dokari4.githubapicompose.data.remote.dto.DetailUserDto
+import com.dokari4.githubapicompose.data.remote.dto.UserDto
 import com.dokari4.githubapicompose.data.remote.network.ApiResponse
 import com.dokari4.githubapicompose.data.remote.network.ApiService
-import com.dokari4.githubapicompose.di.NetworkModule
-import com.dokari4.githubapicompose.data.remote.dto.UserDto
-import dagger.Provides
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow

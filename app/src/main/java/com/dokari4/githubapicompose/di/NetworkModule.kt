@@ -28,7 +28,7 @@ object NetworkModule {
         val authInterceptor = Interceptor { chain ->  
             val originalRequest = chain.request()
             val authenticatedRequest = originalRequest.newBuilder()
-                .header("Authorization", BuildConfig.API_TOKEN)
+                .header("Authorization", "Bearer ${BuildConfig.API_TOKEN}")
                 .build()
             chain.proceed(authenticatedRequest)
         }
