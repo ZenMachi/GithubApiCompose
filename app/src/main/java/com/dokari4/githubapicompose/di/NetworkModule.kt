@@ -1,10 +1,12 @@
 package com.dokari4.githubapicompose.di
 
+import com.dokari4.githubapicompose.BuildConfig
 import com.dokari4.githubapicompose.data.remote.network.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -19,10 +21,21 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
+        val loggingInterceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
+        val authInterceptor = Interceptor { chain ->  
+            val originalRequest = chain.request()
+            val authenticatedRequest = originalRequest.newBuilder()
+                .header("Authorization", BuildConfig.API_TOKEN)
+                .build()
+            chain.proceed(authenticatedRequest)
+        }
+
         return OkHttpClient.Builder()
-            .addNetworkInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            })
+            .addNetworkInterceptor(authInterceptor)
+            .addNetworkInterceptor(loggingInterceptor)
             .build()
     }
 
