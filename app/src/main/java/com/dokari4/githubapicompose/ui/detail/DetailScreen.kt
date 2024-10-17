@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -159,12 +160,13 @@ private fun FollowTabRow(
                         LazyColumn(
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            items(state.listFollowers) {
+                            itemsIndexed(state.listFollowers) { index, data ->
+                                if (index == 0) Spacer(modifier = Modifier.height(16.dp))
                                 CardItem(
                                     modifier = Modifier
                                         .padding(horizontal = 16.dp)
                                         .fillMaxWidth(),
-                                    data = it
+                                    data = data
                                 )
                             }
                         }
@@ -180,12 +182,13 @@ private fun FollowTabRow(
                         LazyColumn(
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            items(state.listFollowing) {
+                            itemsIndexed(state.listFollowing) { index, data ->
+                                if (index == 0) Spacer(modifier = Modifier.height(16.dp))
                                 CardItem(
                                     modifier = Modifier
                                         .padding(horizontal = 16.dp)
                                         .fillMaxWidth(),
-                                    data = it
+                                    data = data
                                 )
                             }
                         }
