@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.parcelize)
     kotlin("plugin.serialization") version "2.0.20"
+    id("com.google.devtools.ksp")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -56,19 +58,24 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.navigation.compose)
 
+    //Hilt
+    implementation ("com.google.dagger:hilt-android:2.50")
+    ksp ("com.google.dagger:hilt-android-compiler:2.47")
+    implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
     //Kotlin Serializable
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
-
     // Retrofit for API requests
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+    // OkHttp for logging
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
+    implementation ("com.squareup.okhttp3:okhttp:4.12.0")
     // ViewModel and LiveData for MVVM architecture
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.8.6")
-
     //Coil for image loading
     implementation("io.coil-kt.coil3:coil-compose:3.0.0-rc01")
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.0-rc01")
+
     implementation(libs.androidx.appcompat)
 
     testImplementation(libs.junit)

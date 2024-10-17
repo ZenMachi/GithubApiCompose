@@ -6,14 +6,17 @@ import com.dokari4.githubapicompose.data.Repository
 import com.dokari4.githubapicompose.data.remote.dto.DetailUserDto
 import com.dokari4.githubapicompose.data.remote.dto.UserDto
 import com.dokari4.githubapicompose.data.remote.network.ApiResponse
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DetailViewModel : ViewModel() {
-    private val repository = Repository()
-
+@HiltViewModel
+class DetailViewModel @Inject constructor(
+    private val repository: Repository
+) : ViewModel() {
     private val _state = MutableStateFlow(DetailScreenState())
     val state = _state.asStateFlow()
 

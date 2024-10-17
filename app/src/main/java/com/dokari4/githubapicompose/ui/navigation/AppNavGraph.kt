@@ -16,8 +16,6 @@ import com.dokari4.githubapicompose.ui.home.HomeViewModel
 fun AppNavGraph(
     navController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier,
-    homeViewModel: HomeViewModel,
-    detailViewModel: DetailViewModel
 ) {
     NavHost(
         navController = navController,
@@ -26,14 +24,13 @@ fun AppNavGraph(
     ) {
 
         composable<Routes.MainScreen> {
-            MainScreen(viewModel = homeViewModel, rootNavController = navController)
+            MainScreen(rootNavController = navController)
         }
 
         composable<Routes.DetailScreen> {
             val args = it.toRoute<Routes.DetailScreen>()
             DetailScreen(
                 username = args.username,
-                viewModel = detailViewModel,
                 onBackClick = { navController.popBackStack() }
             )
         }

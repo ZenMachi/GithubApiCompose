@@ -6,13 +6,16 @@ import androidx.lifecycle.viewModelScope
 import com.dokari4.githubapicompose.data.Repository
 import com.dokari4.githubapicompose.data.remote.network.ApiResponse
 import com.dokari4.githubapicompose.data.remote.dto.UserDto
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
-    private val repository = Repository()
-
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val repository: Repository
+) : ViewModel() {
     private val _users = MutableStateFlow(HomeScreenState())
     val users = _users.asStateFlow()
 

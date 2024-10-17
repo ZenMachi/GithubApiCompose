@@ -16,7 +16,6 @@ fun MainNavGraph(
     navController: NavHostController,
     rootNavController: NavHostController,
     modifier: Modifier = Modifier,
-    homeViewModel: HomeViewModel
 ) {
     NavHost(
         navController = navController,
@@ -25,7 +24,6 @@ fun MainNavGraph(
     ) {
         composable<Routes.MainScreen.HomeScreen> {
             HomeScreen(
-                viewModel = homeViewModel,
                 onCardClick = {
                     rootNavController.navigate(Routes.DetailScreen(it)) {
                         launchSingleTop = true

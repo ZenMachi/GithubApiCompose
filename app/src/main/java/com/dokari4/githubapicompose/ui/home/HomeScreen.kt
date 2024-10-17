@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.dokari4.githubapicompose.data.remote.dto.UserDto
 import com.dokari4.githubapicompose.ui.components.CardItem
 import com.dokari4.githubapicompose.ui.components.ShowProgressBar
@@ -41,7 +42,7 @@ val dummyData = UserDto(
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel,
+    viewModel: HomeViewModel = hiltViewModel(),
     onCardClick: (String) -> Unit
 ) {
     val users by viewModel.users.collectAsState()
@@ -95,14 +96,5 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 private fun CardItemPreview() {
     GithubApiComposeTheme {
         CardItem(data = dummyData)
-    }
-}
-
-@Preview
-@Composable
-private fun HomeScreenPreview() {
-    GithubApiComposeTheme {
-        val viewModel = HomeViewModel()
-        HomeScreen(viewModel = viewModel, onCardClick = {})
     }
 }

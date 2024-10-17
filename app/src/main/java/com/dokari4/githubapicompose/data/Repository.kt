@@ -4,16 +4,20 @@ import android.util.Log
 import com.dokari4.githubapicompose.data.remote.dto.DetailUserDto
 import com.dokari4.githubapicompose.data.remote.network.ApiResponse
 import com.dokari4.githubapicompose.data.remote.network.ApiService
-import com.dokari4.githubapicompose.data.remote.network.RetrofitInstance
+import com.dokari4.githubapicompose.di.NetworkModule
 import com.dokari4.githubapicompose.data.remote.dto.UserDto
+import dagger.Provides
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class Repository {
-    private val apiService: ApiService = RetrofitInstance.api
-
+@Singleton
+class Repository @Inject constructor(
+    private val apiService: ApiService
+) {
     /*
         All Exception
         Should be handled it on NetworkDataSource

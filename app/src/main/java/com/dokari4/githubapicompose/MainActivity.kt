@@ -13,11 +13,10 @@ import com.dokari4.githubapicompose.ui.detail.DetailViewModel
 import com.dokari4.githubapicompose.ui.home.HomeViewModel
 import com.dokari4.githubapicompose.ui.navigation.AppNavGraph
 import com.dokari4.githubapicompose.ui.theme.GithubApiComposeTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val homeViewModel: HomeViewModel by viewModels()
-    private val detailViewModel: DetailViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -27,7 +26,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AppNavGraph(homeViewModel = homeViewModel, detailViewModel = detailViewModel)
+                    AppNavGraph()
                 }
             }
         }

@@ -41,7 +41,6 @@ import kotlinx.coroutines.launch
 fun MainScreen(
     rootNavController: NavHostController,
     navController: NavHostController = rememberNavController(),
-    viewModel: HomeViewModel
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -112,7 +111,6 @@ fun MainScreen(
             MainNavGraph(
                 navController = navController,
                 rootNavController = rootNavController,
-                homeViewModel = viewModel
             )
         }
     }
