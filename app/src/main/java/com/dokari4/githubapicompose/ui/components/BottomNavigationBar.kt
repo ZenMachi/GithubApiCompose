@@ -1,6 +1,5 @@
 package com.dokari4.githubapicompose.ui.components
 
-import android.util.Log
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -12,7 +11,6 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.dokari4.githubapicompose.ui.navigation.Routes
 
 @Composable
 fun BottomNavigationBar(items: List<BottomNavItem>, navController: NavHostController) {

@@ -8,7 +8,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.dokari4.githubapicompose.ui.home.HomeScreen
-import com.dokari4.githubapicompose.ui.home.HomeViewModel
 import com.dokari4.githubapicompose.ui.search.SearchScreen
 
 @Composable
@@ -32,10 +31,21 @@ fun MainNavGraph(
                             saveState = true
                         }
                     }
-                })
+                }
+            )
         }
         composable<Routes.MainScreen.SearchScreen> {
-            SearchScreen()
+            SearchScreen(
+                onCardClick = {
+                    rootNavController.navigate(Routes.DetailScreen(it)) {
+                        launchSingleTop = true
+                        restoreState = true
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                    }
+                }
+            )
         }
         composable<Routes.MainScreen.SettingScreen> {
             Text("This is Setting Screen")

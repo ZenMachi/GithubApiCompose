@@ -2,6 +2,7 @@ package com.dokari4.githubapicompose.data
 
 import android.util.Log
 import com.dokari4.githubapicompose.data.remote.dto.DetailUserDto
+import com.dokari4.githubapicompose.data.remote.dto.SearchUserDto
 import com.dokari4.githubapicompose.data.remote.dto.UserDto
 import com.dokari4.githubapicompose.data.remote.network.ApiResponse
 import com.dokari4.githubapicompose.data.remote.network.ApiService
@@ -17,10 +18,8 @@ class Repository @Inject constructor(
     private val apiService: ApiService
 ) {
     /*
-        All Exception
-        Should be handled it on NetworkDataSource
-
-        On Repo must be only catch Throwable
+    TODO:   All Exception Should be handled it on NetworkDataSource
+            On Repo must be only catch Throwable
     */
     fun fetchUsers(): Flow<ApiResponse<List<UserDto>>> {
         return flow {
@@ -129,6 +128,42 @@ class Repository @Inject constructor(
 
             if (response.isNotEmpty()) {
                 emit(ApiResponse.Success(response))
+            } else {
+                emit(ApiResponse.Empty)
+            }
+        }.catch { e ->
+            when (e) {
+                is HttpException -> {
+                    when (e.code()) {
+                        403 -> {
+                            Log.d("Repository", "getUsers: ${e.message}")
+                            emit(ApiResponse.Error(e.message.toString()))
+                        }
+                    }
+                }
+
+                is Exception -> {
+                    e.printStackTrace()
+                    Log.d("Repository", "getUsers: ${e.message}")
+                    emit(ApiResponse.Error(e.message.toString()))
+                }
+
+                else -> {
+                    Log.d("Repository", "getUsers: ${e.message}")
+                    emit(ApiResponse.Error(e.message.toString()))
+                }
+            }
+        }
+    }
+
+    fun searchUsers(query: String): Flow<ApiResponse<SearchUserDto>> {
+        return flow {
+            emit(ApiResponse.Loading)
+            val response = apiService.searchUsers(query)
+            val body = response.body()
+
+            if (response.isSuccessful && body != null) {
+                emit(ApiResponse.Success(body))
             } else {
                 emit(ApiResponse.Empty)
             }

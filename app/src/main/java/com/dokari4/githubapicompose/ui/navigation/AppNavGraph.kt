@@ -31,7 +31,10 @@ fun AppNavGraph(
             val args = it.toRoute<Routes.DetailScreen>()
             DetailScreen(
                 username = args.username,
-                onBackClick = { navController.popBackStack() }
+                onBackClick = { navController.popBackStack() },
+                onNavigateToDetailScreen = { username ->
+                    navController.navigate(Routes.DetailScreen(username))
+                }
             )
         }
     }
