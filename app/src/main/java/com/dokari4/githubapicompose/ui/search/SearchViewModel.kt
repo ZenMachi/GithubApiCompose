@@ -29,6 +29,7 @@ class SearchViewModel @Inject constructor(
                         _state.update {
                             it.copy(
                                 users = emptyList(),
+                                firstTime = false,
                                 isLoading = true
                             )
                         }
@@ -38,6 +39,7 @@ class SearchViewModel @Inject constructor(
                         _state.update {
                             it.copy(
                                 users = result.data.items,
+                                firstTime = false,
                                 isLoading = false
                             )
                         }
@@ -48,6 +50,7 @@ class SearchViewModel @Inject constructor(
                             it.copy(
                                 users = emptyList(),
                                 errorMessage = result.errorMessage,
+                                firstTime = false,
                                 isLoading = false
                             )
                         }
@@ -56,6 +59,7 @@ class SearchViewModel @Inject constructor(
                         _state.update {
                             it.copy(
                                 users = emptyList(),
+                                firstTime = false,
                                 isLoading = false,
                             )
                         }
@@ -70,4 +74,5 @@ data class SearchScreenState(
     val users: List<UserDto> = emptyList(),
     val errorMessage: String = "",
     val isLoading: Boolean = false,
+    val firstTime: Boolean = true,
 )

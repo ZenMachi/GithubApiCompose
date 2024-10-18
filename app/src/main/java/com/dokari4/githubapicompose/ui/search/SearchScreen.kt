@@ -48,6 +48,11 @@ fun SearchScreen(
             }
         )
         if (state.isLoading) ShowProgressBar()
+        if (state.users.isEmpty() && state.firstTime) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(text = "Please Search User")
+            }
+        }
         if (state.users.isNotEmpty())  {
             Spacer(modifier = Modifier.height(16.dp))
             LazyColumn(
@@ -66,12 +71,10 @@ fun SearchScreen(
                 }
             }
         }
-        if (state.users.isEmpty()) {
+        if (state.users.isEmpty() && !state.firstTime) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text(text = "No Result")
             }
         }
-
-
     }
 }
