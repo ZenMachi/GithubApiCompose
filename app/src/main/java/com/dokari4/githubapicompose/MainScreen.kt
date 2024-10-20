@@ -28,9 +28,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.dokari4.githubapicompose.ui.components.BottomNavItem
 import com.dokari4.githubapicompose.ui.components.BottomNavigationBar
-import com.dokari4.githubapicompose.ui.components.ObserveAsEvents
+import com.dokari4.githubapicompose.utils.ObserveAsEvents
 import com.dokari4.githubapicompose.ui.components.SnackbarController
-import com.dokari4.githubapicompose.ui.home.HomeViewModel
 import com.dokari4.githubapicompose.ui.navigation.MainNavGraph
 import com.dokari4.githubapicompose.ui.navigation.Routes
 import kotlinx.coroutines.launch

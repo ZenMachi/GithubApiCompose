@@ -74,6 +74,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.navigation.compose)
 
+    //Lottie
+    val lottieVersion = "6.0.0"
+    implementation("com.airbnb.android:lottie-compose:$lottieVersion")
+
     //Hilt
     implementation ("com.google.dagger:hilt-android:2.50")
     ksp ("com.google.dagger:hilt-android-compiler:2.47")

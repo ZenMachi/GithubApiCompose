@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Text
@@ -18,11 +19,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.dokari4.githubapicompose.ui.components.CardItem
 import com.dokari4.githubapicompose.ui.components.ShowProgressBar
 import com.dokari4.githubapicompose.ui.components.TextSearchBar
+import com.dokari4.githubapicompose.ui.components.lottie.NotFoundLottie
 
 /*
 TODO 01: Create SearchScreen
@@ -38,7 +41,9 @@ fun SearchScreen(
 ) {
     val state by viewModel.state.collectAsState()
 
-    Column {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+    ) {
         TextSearchBar(
             modifier = Modifier
                 .fillMaxWidth()
@@ -72,9 +77,22 @@ fun SearchScreen(
             }
         }
         if (state.users.isEmpty() && !state.firstTime) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = "No Result")
-            }
+           Column(
+               modifier = Modifier
+                   .fillMaxSize(),
+               horizontalAlignment = Alignment.CenterHorizontally,
+               verticalArrangement = Arrangement.Center
+           ) {
+               Box(
+                   modifier = Modifier
+                       .width(200.dp)
+                       .height(200.dp),
+                   contentAlignment = Alignment.Center
+               ) {
+                   NotFoundLottie()
+               }
+               Text(text = state.errorMessage, textAlign = TextAlign.Center)
+           }
         }
     }
 }

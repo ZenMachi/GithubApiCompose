@@ -10,26 +10,35 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
+import com.dokari4.githubapicompose.data.remote.dto.UserDto
 import com.dokari4.githubapicompose.ui.components.CardItem
 import com.dokari4.githubapicompose.ui.components.ShowProgressBar
-import com.dokari4.githubapicompose.ui.detail.DetailScreenState
 
 @Composable
 fun ListFollow(
     onFetchData: () -> Unit,
-    state: DetailScreenState,
+    listUser: List<UserDto>,
+    isLoading: Boolean,
     onNavigate: (String) -> Unit
 ) {
-    LaunchedEffect(Unit) {
-        onFetchData()
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+
+    LaunchedEffect(lifecycleOwner.lifecycle) {
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            onFetchData()
+        }
     }
 
-    if (state.isLoadingFollowers) ShowProgressBar()
+    if (isLoading) ShowProgressBar()
 
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        itemsIndexed(state.listFollowers) { index, data ->
+        itemsIndexed(listUser) { index, data ->
             val firstItem = if (index == 0) 16.dp else 0.dp
             CardItem(
                 modifier = Modifier

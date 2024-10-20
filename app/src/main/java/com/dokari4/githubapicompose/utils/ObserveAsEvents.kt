@@ -1,4 +1,4 @@
-package com.dokari4.githubapicompose.ui.components
+package com.dokari4.githubapicompose.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

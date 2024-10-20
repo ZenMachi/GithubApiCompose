@@ -68,7 +68,8 @@ fun FollowTabRow(
                     0 -> {
                         ListFollow(
                             onFetchData = { viewModel.getFollowersUser(username) },
-                            state = state,
+                            listUser = state.listFollowers,
+                            isLoading = state.isLoadingFollowers,
                             onNavigate = onNavigate
                         )
                     }
@@ -76,7 +77,8 @@ fun FollowTabRow(
                     1 -> {
                         ListFollow(
                             onFetchData = { viewModel.getFollowingUser(username) },
-                            state = state,
+                            listUser = state.listFollowing,
+                            isLoading = state.isLoadingFollowing,
                             onNavigate = onNavigate
                         )
                     }
