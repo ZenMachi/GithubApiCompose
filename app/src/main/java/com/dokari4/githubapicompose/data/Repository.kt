@@ -162,7 +162,7 @@ class Repository @Inject constructor(
             val response = apiService.searchUsers(query)
             val body = response.body()
 
-            if (response.isSuccessful && body != null) {
+            if (response.isSuccessful && body?.items?.isNotEmpty() == true) {
                 emit(ApiResponse.Success(body))
             } else {
                 emit(ApiResponse.Empty)

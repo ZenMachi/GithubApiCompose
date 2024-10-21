@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.dokari4.githubapicompose.ui.UIState
 import com.dokari4.githubapicompose.ui.components.CardItem
 import com.dokari4.githubapicompose.ui.components.ShowProgressBar
 import com.dokari4.githubapicompose.ui.components.SnackbarController
@@ -35,12 +36,13 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     onCardClick: (String) -> Unit
 ) {
-    val state by viewModel.state.collectAsState()
+    val uiState by viewModel.state.collectAsState()
+    val state = uiState
 
     /**
      * Launched Effect Cause function to be called everytime the composable is called
      * Better call the function without using Launched Effect
-    */
+     */
 //    LaunchedEffect(Unit) {
 //        viewModel.getUsers()
 //    }
@@ -48,54 +50,60 @@ fun HomeScreen(
     /**
      * Calling viewModel in the composable function only make infinite loop
      * Better Call in the init block of the viewModel
-    */
+     */
 //    viewModel.getUsers()
 
     Column {
-        if (state.isLoading) ShowProgressBar()
-        if (state.errorMessage.isNotEmpty()) {
-//            Toast.makeText(context, users.errorMessage, Toast.LENGTH_SHORT).show()
-            LaunchedEffect(Unit) {
-                SnackbarController.sendEvent(
-                    event = SnackbarEvent(
-                        message = state.errorMessage,
-                        action = null
-                    )
-                )
-            }
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Box(
-                    modifier = Modifier
-                        .width(200.dp)
-                        .height(200.dp),
-                    contentAlignment = Alignment.Center
+
+        when (state) {
+            UIState.Initial -> {}
+            UIState.Loading -> ShowProgressBar()
+            is UIState.Success -> {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    ErrorLottie()
+                    itemsIndexed(state.data) { index, data ->
+                        val lastPadding = if (index == state.data.lastIndex) 16.dp else 0.dp
+                        CardItem(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .padding(bottom = lastPadding)
+                                .fillMaxWidth()
+                                .clickable(onClick = { onCardClick(data.idName) }),
+                            data = data
+                        )
+                    }
                 }
-                Text(text = state.errorMessage, textAlign = TextAlign.Center)
             }
-        }
-        if (state.users.isNotEmpty()) {
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                itemsIndexed(state.users) { index, data ->
-                    val lastPadding = if (index == state.users.lastIndex) 16.dp else 0.dp
-                    CardItem(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .padding(bottom = lastPadding)
-                            .fillMaxWidth()
-                            .clickable(onClick = { onCardClick(data.idName) }),
-                        data = data
+
+            is UIState.Error -> {
+                LaunchedEffect(Unit) {
+                    SnackbarController.sendEvent(
+                        event = SnackbarEvent(
+                            message = state.errorMessage,
+                            action = null
+                        )
                     )
                 }
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .width(200.dp)
+                            .height(200.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        ErrorLottie()
+                    }
+                    Text(text = state.errorMessage, textAlign = TextAlign.Center)
+                }
             }
+
+            UIState.Empty -> {}
         }
     }
 }
