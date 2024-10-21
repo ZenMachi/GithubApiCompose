@@ -17,12 +17,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.dokari4.githubapicompose.ui.detail.DetailScreenState
-import com.dokari4.githubapicompose.ui.detail.DetailViewModel
 
 @Composable
 fun FollowTabRow(
-    username: String,
-    viewModel: DetailViewModel,
     state: DetailScreenState,
     onNavigate: (String) -> Unit,
 ) {
@@ -67,7 +64,6 @@ fun FollowTabRow(
                 when (index) {
                     0 -> {
                         ListFollow(
-                            onFetchData = { viewModel.getFollowersUser(username) },
                             listUser = state.listFollowers,
                             isLoading = state.isLoadingFollowers,
                             onNavigate = onNavigate
@@ -76,7 +72,6 @@ fun FollowTabRow(
 
                     1 -> {
                         ListFollow(
-                            onFetchData = { viewModel.getFollowingUser(username) },
                             listUser = state.listFollowing,
                             isLoading = state.isLoadingFollowing,
                             onNavigate = onNavigate

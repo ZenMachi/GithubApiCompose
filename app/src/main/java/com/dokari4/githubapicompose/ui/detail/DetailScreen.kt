@@ -28,8 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.dokari4.githubapicompose.ui.components.Bio
 import com.dokari4.githubapicompose.ui.components.ShowProgressBar
-import com.dokari4.githubapicompose.ui.components.SnackbarController
-import com.dokari4.githubapicompose.ui.components.SnackbarEvent
 import com.dokari4.githubapicompose.ui.components.detail.FollowTabRow
 import com.dokari4.githubapicompose.ui.components.detail.ProfileBar
 import com.dokari4.githubapicompose.ui.components.lottie.ErrorLottie
@@ -47,6 +45,8 @@ fun DetailScreen(
 
     LaunchedEffect(Unit) {
         viewModel.getDetailUser(username)
+        viewModel.getFollowingUser(username)
+        viewModel.getFollowersUser(username)
     }
     if (state.isLoadingScreen) ShowProgressBar()
     if (state.errorMessage.isNotEmpty()) {
@@ -103,7 +103,7 @@ fun DetailScreen(
                     Bio(bio = state.data?.bio!!)
                     Spacer(modifier = Modifier.height(16.dp))
                 }
-                FollowTabRow(username, viewModel, state, onNavigateToDetailScreen)
+                FollowTabRow(state, onNavigateToDetailScreen)
             }
         }
     }

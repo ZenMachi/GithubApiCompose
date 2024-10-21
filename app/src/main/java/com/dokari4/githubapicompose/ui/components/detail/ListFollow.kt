@@ -7,34 +7,31 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.repeatOnLifecycle
 import com.dokari4.githubapicompose.data.remote.dto.UserDto
 import com.dokari4.githubapicompose.ui.components.CardItem
 import com.dokari4.githubapicompose.ui.components.ShowProgressBar
 
 @Composable
 fun ListFollow(
-    onFetchData: () -> Unit,
     listUser: List<UserDto>,
     isLoading: Boolean,
     onNavigate: (String) -> Unit
 ) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-
-
-    LaunchedEffect(lifecycleOwner.lifecycle) {
-        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            onFetchData()
-        }
-    }
+    /**
+     * Calling LaunchedEffect from this composable make function always executed
+     * Because this happen when composable recomposed / is it removed from view tree
+     *
+     * Solution are calling LaunchedEffect from parent composable
+     */
+//    LaunchedEffect(lifecycleOwner.lifecycle) {
+//        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+//            onFetchData()
+//        }
+//    }
 
     if (isLoading) ShowProgressBar()
-
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
