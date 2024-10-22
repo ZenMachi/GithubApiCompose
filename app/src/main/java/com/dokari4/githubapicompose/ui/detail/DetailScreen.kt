@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.dokari4.githubapicompose.ui.UIState
 import com.dokari4.githubapicompose.ui.components.Bio
 import com.dokari4.githubapicompose.ui.components.ShowProgressBar
 import com.dokari4.githubapicompose.ui.components.detail.FollowTabRow
@@ -40,71 +41,100 @@ fun DetailScreen(
     onBackClick: () -> Unit,
     onNavigateToDetailScreen: (String) -> Unit,
 ) {
-    val state by viewModel.state.collectAsState()
-    val titleAppBar = state.data?.login ?: "Detail User"
+    val detailUserUiState by viewModel.detailUserState.collectAsState()
+    val followersUiState by viewModel.followersUserState.collectAsState()
+    val followingUiState by viewModel.followingUserState.collectAsState()
+
+    val detailUserState = detailUserUiState
+    val followersState = followersUiState
+    val followingState = followingUiState
+
+
 
     LaunchedEffect(Unit) {
         viewModel.getDetailUser(username)
         viewModel.getFollowingUser(username)
         viewModel.getFollowersUser(username)
     }
-    if (state.isLoadingScreen) ShowProgressBar()
-    if (state.errorMessage.isNotEmpty()) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Box(
-                modifier = Modifier
-                    .width(200.dp)
-                    .height(200.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                ErrorLottie()
-            }
-            Text(text = state.errorMessage, textAlign = TextAlign.Center)
-        }
-    }
+    when (detailUserState) {
+        UIState.Initial, UIState.Loading -> ShowProgressBar()
+        is UIState.Success -> {
+            val data = detailUserState.data
 
-    if (state.data != null) {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text(titleAppBar, fontWeight = FontWeight.Bold) },
-                    navigationIcon = {
-                        IconButton(
-                            onClick = { onBackClick() }
-                        ) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Back"
-                            )
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = {
+                            Text(data.login, fontWeight = FontWeight.Bold) },
+                        navigationIcon = {
+                            IconButton(
+                                onClick = { onBackClick() }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                    contentDescription = "Back"
+                                )
+                            }
                         }
+                    )
+                }
+            ) { innerPadding ->
+                val listFollowers = if (followersState is UIState.Success) {
+                    followersState.data
+                } else emptyList()
+                val listFollowing = if (followingState is UIState.Success) {
+                    followingState.data
+                } else emptyList()
+                val isLoadingFollowers = followersState is UIState.Loading
+                val isLoadingFollowing = followingState is UIState.Loading
+
+                Column(
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .fillMaxSize()
+                ) {
+                    ProfileBar(
+                        photoUrl = data.avatarUrl,
+                        name = data.name,
+                        repoCount = data.publicRepo.toLong(),
+                        followerCount = data.followers.toLong(),
+                        followingCount = data.following.toLong()
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    if (data.bio != null) {
+                        Bio(bio = data.bio)
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
-                )
+                    FollowTabRow(
+                        isLoadingFollowing = isLoadingFollowing,
+                        isLoadingFollowers = isLoadingFollowers,
+                        listFollowers = listFollowers,
+                        listFollowing = listFollowing,
+                        onNavigate = onNavigateToDetailScreen
+                    )
+                }
             }
-        ) { innerPadding ->
+        }
+        is UIState.Error -> {
             Column(
                 modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize()
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                ProfileBar(
-                    photoUrl = state.data?.avatarUrl ?: "",
-                    name = state.data?.name,
-                    repoCount = state.data?.publicRepo?.toLong() ?: 0,
-                    followerCount = state.data?.followers?.toLong() ?: 0,
-                    followingCount = state.data?.following?.toLong() ?: 0
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                if (state.data?.bio != null) {
-                    Bio(bio = state.data?.bio!!)
-                    Spacer(modifier = Modifier.height(16.dp))
+                Box(
+                    modifier = Modifier
+                        .width(200.dp)
+                        .height(200.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    ErrorLottie()
                 }
-                FollowTabRow(state, onNavigateToDetailScreen)
+                Text(text = detailUserState.errorMessage, textAlign = TextAlign.Center)
             }
+        }
+        UIState.Empty -> {
+
         }
     }
 }

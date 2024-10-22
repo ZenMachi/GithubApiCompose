@@ -6,10 +6,11 @@ import com.dokari4.githubapicompose.data.Repository
 import com.dokari4.githubapicompose.data.remote.dto.DetailUserDto
 import com.dokari4.githubapicompose.data.remote.dto.UserDto
 import com.dokari4.githubapicompose.data.remote.network.ApiResponse
+import com.dokari4.githubapicompose.ui.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,154 +18,52 @@ import javax.inject.Inject
 class DetailViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
-    private val _state = MutableStateFlow(DetailScreenState())
-    val state = _state.asStateFlow()
+    private val _detailUserState = MutableStateFlow<UIState<DetailUserDto>>(UIState.Loading)
+    val detailUserState = _detailUserState.asStateFlow()
+
+    private val _followingUserState = MutableStateFlow<UIState<List<UserDto>>>(UIState.Loading)
+    val followingUserState = _followingUserState.asStateFlow()
+
+    private val _followersUserState = MutableStateFlow<UIState<List<UserDto>>>(UIState.Loading)
+    val followersUserState = _followersUserState.asStateFlow()
 
     fun getDetailUser(username: String) {
         viewModelScope.launch {
-            val response = repository.fetchDetailUser(username)
-            response.collect { result ->
-                when (result) {
-                    ApiResponse.Loading -> {
-                        _state.update {
-                            it.copy(
-                                isLoadingScreen = true,
-                                data = null,
-                            )
-                        }
-                    }
-
-                    ApiResponse.Empty -> {
-                        _state.update {
-                            it.copy(
-                                isLoadingScreen = false,
-                                data = null
-                            )
-                        }
-                    }
-
-                    is ApiResponse.Error -> {
-                        _state.update {
-                            it.copy(
-                                isLoadingScreen = false,
-                                data = null,
-                                errorMessage = result.errorMessage
-                            )
-                        }
-                    }
-
-                    is ApiResponse.Success -> {
-                        _state.update {
-                            it.copy(
-                                isLoadingScreen = false,
-                                data = result.data
-                            )
-                        }
-                    }
-                }
+            fetchUserData(_detailUserState) {
+                repository.fetchDetailUser(username)
             }
         }
     }
 
     fun getFollowersUser(username: String) {
         viewModelScope.launch {
-            val response = repository.fetchFollowers(username)
-            response.collect { result ->
-                when (result) {
-                    ApiResponse.Loading -> {
-                        _state.update {
-                            it.copy(
-                                isLoadingFollowers = true,
-                                listFollowers = emptyList()
-                            )
-                        }
-                    }
-
-                    ApiResponse.Empty -> {
-                        _state.update {
-                            it.copy(
-                                isLoadingFollowers = false,
-                                listFollowers = emptyList()
-                            )
-                        }
-                    }
-
-                    is ApiResponse.Error -> {
-                        _state.update {
-                            it.copy(
-                                isLoadingFollowers = false,
-                                listFollowers = emptyList(),
-                                errorMessage = result.errorMessage
-                            )
-                        }
-                    }
-
-                    is ApiResponse.Success -> {
-                        _state.update {
-                            it.copy(
-                                isLoadingFollowers = false,
-                                listFollowers = result.data
-                            )
-                        }
-                    }
-                }
-            }
+           fetchUserData(_followersUserState) {
+               repository.fetchFollowers(username)
+           }
         }
     }
 
     fun getFollowingUser(username: String) {
         viewModelScope.launch {
-            val response = repository.fetchFollowing(username)
-            response.collect { result ->
-                when (result) {
-                    ApiResponse.Loading -> {
-                        _state.update {
-                            it.copy(
-                                isLoadingFollowing = true,
-                                listFollowing = emptyList()
-                            )
-                        }
-                    }
+            fetchUserData(_followingUserState) {
+                repository.fetchFollowing(username)
+            }
+        }
+    }
 
-                    ApiResponse.Empty -> {
-                        _state.update {
-                            it.copy(
-                                isLoadingFollowing = false,
-                                listFollowing = emptyList()
-                            )
-                        }
-                    }
-
-                    is ApiResponse.Error -> {
-                        _state.update {
-                            it.copy(
-                                isLoadingFollowing = false,
-                                listFollowing = emptyList(),
-                                errorMessage = result.errorMessage
-                            )
-                        }
-                    }
-
-                    is ApiResponse.Success -> {
-                        _state.update {
-                            it.copy(
-                                isLoadingFollowing = false,
-                                listFollowing = result.data
-                            )
-                        }
-                    }
+    private fun <T> fetchUserData(
+        state: MutableStateFlow<UIState<T>>,
+        apiCall: suspend () -> Flow<ApiResponse<T>>
+    ) {
+        viewModelScope.launch {
+            apiCall().collect { result ->
+                state.value = when (result) {
+                    ApiResponse.Loading -> UIState.Loading
+                    is ApiResponse.Success -> UIState.Success(result.data)
+                    is ApiResponse.Error -> UIState.Error(result.errorMessage)
+                    ApiResponse.Empty -> UIState.Empty
                 }
             }
         }
     }
 }
-
-data class DetailScreenState(
-    val data: DetailUserDto? = null,
-    val listFollowers: List<UserDto> = emptyList(),
-    val listFollowing: List<UserDto> = emptyList(),
-    val errorMessage: String = "",
-    val isLoadingScreen: Boolean = true,
-    val isLoadingFollowers: Boolean = true,
-    val isLoadingFollowing: Boolean = true,
-)

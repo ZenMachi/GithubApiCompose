@@ -16,11 +16,14 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.dokari4.githubapicompose.ui.detail.DetailScreenState
+import com.dokari4.githubapicompose.data.remote.dto.UserDto
 
 @Composable
 fun FollowTabRow(
-    state: DetailScreenState,
+    isLoadingFollowing: Boolean,
+    isLoadingFollowers: Boolean,
+    listFollowers: List<UserDto>,
+    listFollowing: List<UserDto>,
     onNavigate: (String) -> Unit,
 ) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
@@ -64,16 +67,16 @@ fun FollowTabRow(
                 when (index) {
                     0 -> {
                         ListFollow(
-                            listUser = state.listFollowers,
-                            isLoading = state.isLoadingFollowers,
+                            listUser = listFollowers,
+                            isLoading = isLoadingFollowers,
                             onNavigate = onNavigate
                         )
                     }
 
                     1 -> {
                         ListFollow(
-                            listUser = state.listFollowing,
-                            isLoading = state.isLoadingFollowing,
+                            listUser = listFollowing,
+                            isLoading = isLoadingFollowing,
                             onNavigate = onNavigate
                         )
                     }

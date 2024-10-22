@@ -95,6 +95,8 @@ dependencies {
     //Coil for image loading
     implementation("io.coil-kt.coil3:coil-compose:3.0.0-rc01")
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.0-rc01")
+    // DataStore
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
 
     implementation(libs.androidx.appcompat)
 

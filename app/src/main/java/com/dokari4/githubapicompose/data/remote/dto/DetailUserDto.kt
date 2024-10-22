@@ -6,7 +6,7 @@ data class DetailUserDto(
     @field:SerializedName("avatar_url")
     val avatarUrl: String,
     @field:SerializedName("bio")
-    val bio: String,
+    val bio: String?,
     @field:SerializedName("created_at")
     val createdAt: String,
     @field:SerializedName("followers")

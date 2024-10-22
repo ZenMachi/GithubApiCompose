@@ -1,6 +1,5 @@
 package com.dokari4.githubapicompose.ui.navigation
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -9,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.dokari4.githubapicompose.ui.home.HomeScreen
 import com.dokari4.githubapicompose.ui.search.SearchScreen
+import com.dokari4.githubapicompose.ui.settings.SettingsScreen
 
 @Composable
 fun MainNavGraph(
@@ -48,7 +48,7 @@ fun MainNavGraph(
             )
         }
         composable<Routes.MainScreen.SettingScreen> {
-            Text("This is Setting Screen")
+            SettingsScreen()
         }
     }
 }
