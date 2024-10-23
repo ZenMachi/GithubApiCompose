@@ -49,13 +49,12 @@ fun DetailScreen(
     val followersState = followersUiState
     val followingState = followingUiState
 
-
-
     LaunchedEffect(Unit) {
         viewModel.getDetailUser(username)
         viewModel.getFollowingUser(username)
         viewModel.getFollowersUser(username)
     }
+    //TODO: Always Use Scaffold and handle error with lottie animation
     when (detailUserState) {
         UIState.Initial, UIState.Loading -> ShowProgressBar()
         is UIState.Success -> {

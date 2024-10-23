@@ -1,6 +1,8 @@
 package com.dokari4.githubapicompose.data
 
 import android.util.Log
+import com.dokari4.githubapicompose.data.local.DatastoreManager
+import com.dokari4.githubapicompose.data.local.Theme
 import com.dokari4.githubapicompose.data.remote.dto.DetailUserDto
 import com.dokari4.githubapicompose.data.remote.dto.SearchUserDto
 import com.dokari4.githubapicompose.data.remote.dto.UserDto
@@ -15,7 +17,8 @@ import javax.inject.Singleton
 
 @Singleton
 class Repository @Inject constructor(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    private val datastore: DatastoreManager
 ) {
     /*
     TODO:   All Exception Should be handled it on NetworkDataSource
@@ -191,4 +194,11 @@ class Repository @Inject constructor(
             }
         }
     }
+
+    suspend fun saveAppTheme(theme: Theme) {
+        datastore.setAppTheme(theme)
+    }
+
+    fun getAppTheme(): Flow<Theme> = datastore.appThemeFlow
+
 }

@@ -32,6 +32,7 @@ fun AppNavGraph(
             DetailScreen(
                 username = args.username,
                 onBackClick = { navController.popBackStack() },
+                //TODO: When spamming click back cause app to Blank
                 onNavigateToDetailScreen = { username ->
                     navController.navigate(Routes.DetailScreen(username))
                 }

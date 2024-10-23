@@ -28,13 +28,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dokari4.githubapicompose.R
 import com.dokari4.githubapicompose.data.local.Theme
+import com.dokari4.githubapicompose.ui.settings.SettingsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RowOption() {
+fun RowOption(
+    settingsViewModel: SettingsViewModel = hiltViewModel()
+) {
+    //TODO: Make this composable function more reusable
     var showDialog by remember { mutableStateOf(false) }
+    val theme by settingsViewModel.theme.collectAsStateWithLifecycle()
 
     if (showDialog) {
         BasicAlertDialog(
@@ -53,7 +60,7 @@ fun RowOption() {
                 tonalElevation = AlertDialogDefaults.TonalElevation
             ) {
                 Column {
-                    var selectedOption by remember { mutableStateOf(Theme.AUTO) }
+                    var selectedOption by remember { mutableStateOf(theme) }
                     Theme.entries.forEach {
                         Row(
                             modifier = Modifier
@@ -80,7 +87,10 @@ fun RowOption() {
                             Text(text = "Cancel")
                         }
                         TextButton(
-                            onClick = { showDialog = false },
+                            onClick = {
+                                showDialog = false
+                                settingsViewModel.setTheme(selectedOption)
+                            },
                             modifier = Modifier.padding(8.dp)
                         ) {
                             Text(text = "OK")
@@ -96,7 +106,8 @@ fun RowOption() {
             .padding(vertical = 16.dp, horizontal = 16.dp)
             .fillMaxWidth()
             .clickable { showDialog = true },
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_rounded_brightness_6_24),
@@ -106,7 +117,7 @@ fun RowOption() {
             Text(text = "Theme")
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = "Light",
+                text = theme.displayName,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 style = MaterialTheme.typography.bodySmall
             )

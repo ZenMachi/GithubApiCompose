@@ -25,6 +25,6 @@ class DatastoreManager(context: Context) {
     }
 
     companion object {
-        val APP_THEME_KEY = intPreferencesKey("app_theme")
+        private val APP_THEME_KEY = intPreferencesKey("app_theme")
     }
 }

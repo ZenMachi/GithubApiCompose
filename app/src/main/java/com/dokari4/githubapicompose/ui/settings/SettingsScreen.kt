@@ -41,6 +41,7 @@ import com.dokari4.githubapicompose.ui.components.RowOption
 
 @Composable
 fun SettingsScreen() {
+    // TODO: Add settings screen
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -56,7 +57,7 @@ fun SettingsScreen() {
             )
             Text(text = "Settings")
         }
-
+        // TODO: Add Change Theme Option
         RowOption()
     }
 }
