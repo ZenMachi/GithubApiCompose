@@ -26,6 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.dokari4.githubapicompose.ui.UIState
 import com.dokari4.githubapicompose.ui.components.Bio
 import com.dokari4.githubapicompose.ui.components.ShowProgressBar
@@ -49,6 +51,8 @@ fun DetailScreen(
     val followersState = followersUiState
     val followingState = followingUiState
 
+    val localLifecycleOwner = LocalLifecycleOwner.current
+
     LaunchedEffect(Unit) {
         viewModel.getDetailUser(username)
         viewModel.getFollowingUser(username)
@@ -64,10 +68,22 @@ fun DetailScreen(
                 topBar = {
                     TopAppBar(
                         title = {
-                            Text(data.login, fontWeight = FontWeight.Bold) },
+                            Text(data.login, fontWeight = FontWeight.Bold)
+                        },
                         navigationIcon = {
                             IconButton(
-                                onClick = { onBackClick() }
+                                onClick = {
+                                    /*
+                                    *  This lifecycle checking prevent app blank
+                                    *  when user click back button rapidly
+                                    * */
+                                    if (
+                                        localLifecycleOwner.lifecycle.currentState
+                                        < Lifecycle.State.RESUMED
+                                    )
+                                        return@IconButton
+                                    onBackClick()
+                                }
                             ) {
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -114,6 +130,7 @@ fun DetailScreen(
                 }
             }
         }
+
         is UIState.Error -> {
             Column(
                 modifier = Modifier
@@ -132,6 +149,7 @@ fun DetailScreen(
                 Text(text = detailUserState.errorMessage, textAlign = TextAlign.Center)
             }
         }
+
         UIState.Empty -> {
 
         }

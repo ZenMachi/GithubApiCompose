@@ -9,8 +9,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.dokari4.githubapicompose.MainScreen
 import com.dokari4.githubapicompose.ui.detail.DetailScreen
-import com.dokari4.githubapicompose.ui.detail.DetailViewModel
-import com.dokari4.githubapicompose.ui.home.HomeViewModel
 
 @Composable
 fun AppNavGraph(
@@ -22,7 +20,6 @@ fun AppNavGraph(
         startDestination = Routes.MainScreen,
         modifier = modifier
     ) {
-
         composable<Routes.MainScreen> {
             MainScreen(rootNavController = navController)
         }
@@ -31,8 +28,15 @@ fun AppNavGraph(
             val args = it.toRoute<Routes.DetailScreen>()
             DetailScreen(
                 username = args.username,
+                /*
+                *   navController.navigateUp() fixed problem when user
+                *   rapidly clicking back button
+                *   but this function only navigate to previous screen
+                *
+                *   popBackStack() if lifecycle is not checked will be always triggering
+                *   then function till Screen goes blank
+                * */
                 onBackClick = { navController.popBackStack() },
-                //TODO: When spamming click back cause app to Blank
                 onNavigateToDetailScreen = { username ->
                     navController.navigate(Routes.DetailScreen(username))
                 }
