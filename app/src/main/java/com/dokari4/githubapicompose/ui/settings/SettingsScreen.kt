@@ -1,13 +1,9 @@
 package com.dokari4.githubapicompose.ui.settings
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,10 +20,10 @@ import com.dokari4.githubapicompose.ui.components.settings.ThemeSelectionDialog
 
 @Composable
 fun SettingsScreen(
-    settingsViewModel: SettingsViewModel = hiltViewModel()
+    viewModel: SettingsViewModel = hiltViewModel()
 ) {
     var showThemeDialog by remember { mutableStateOf(false) }
-    val theme by settingsViewModel.theme.collectAsStateWithLifecycle()
+    val theme by viewModel.theme.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier
@@ -46,11 +42,12 @@ fun SettingsScreen(
             ThemeSelectionDialog(
                 currentTheme = theme,
                 onThemeSelected = {
-                    settingsViewModel.setTheme(it)
+                    viewModel.setTheme(it)
                     showThemeDialog = false
                 },
                 onDismissRequest = { showThemeDialog = false }
             )
         }
+        //TODO: Add Row Slider Option for Dynamic Color
     }
 }

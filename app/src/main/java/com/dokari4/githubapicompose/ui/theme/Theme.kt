@@ -37,6 +37,11 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
+/*  TODO: Add #FAA356 as Source Color
+     Nunito as Display, Headline, Title
+     Open Sans as Body & Labels
+*/
+
 @Composable
 fun GithubApiComposeTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
