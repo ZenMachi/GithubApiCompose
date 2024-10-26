@@ -16,7 +16,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.dokari4.githubapicompose.R
 import com.dokari4.githubapicompose.ui.components.settings.RowOption
+import com.dokari4.githubapicompose.ui.components.settings.RowSwitch
 import com.dokari4.githubapicompose.ui.components.settings.ThemeSelectionDialog
+import com.dokari4.githubapicompose.utils.isDynamicColorSupported
 
 @Composable
 fun SettingsScreen(
@@ -24,6 +26,7 @@ fun SettingsScreen(
 ) {
     var showThemeDialog by remember { mutableStateOf(false) }
     val theme by viewModel.theme.collectAsStateWithLifecycle()
+    val isDynamicColorEnabled by viewModel.isDynamicColor.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier
@@ -48,6 +51,17 @@ fun SettingsScreen(
                 onDismissRequest = { showThemeDialog = false }
             )
         }
-        //TODO: Add Row Slider Option for Dynamic Color
+        RowSwitch(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 56.dp, end = 16.dp, top = 16.dp, bottom = 16.dp),
+            isChecked = isDynamicColorEnabled,
+            title = "Dynamic Color",
+            subtitle = if (isDynamicColorSupported) "Enable Dynamic Color" else "Android 12+ only",
+            enabled = isDynamicColorSupported,
+            onClick = {
+                viewModel.setDynamicColor(!isDynamicColorEnabled)
+            }
+        )
     }
 }

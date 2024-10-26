@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -16,6 +17,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import com.dokari4.githubapicompose.data.remote.dto.UserDto
 
 @Composable
@@ -53,7 +55,7 @@ fun FollowTabRow(
         ) {
             tabs.forEachIndexed { index, tab ->
                 Tab(
-                    text = { Text(tab.title) },
+                    text = { Text(tab.title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold) },
                     selected = index == selectedTabIndex,
                     onClick = { selectedTabIndex = index }
                 )

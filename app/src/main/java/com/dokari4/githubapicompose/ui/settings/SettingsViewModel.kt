@@ -16,6 +16,8 @@ class SettingsViewModel @Inject constructor(
 ): ViewModel() {
     private val _theme = MutableStateFlow(Theme.AUTO)
     val theme = _theme.asStateFlow()
+    private val _isDynamicColor = MutableStateFlow(true)
+    val isDynamicColor = _isDynamicColor.asStateFlow()
 
     init{
         viewModelScope.launch {
@@ -23,11 +25,22 @@ class SettingsViewModel @Inject constructor(
                 _theme.value = it
             }
         }
+        viewModelScope.launch {
+            repository.getDynamicColor().collect{
+                _isDynamicColor.value = it
+            }
+        }
     }
 
     fun setTheme(theme: Theme) {
         viewModelScope.launch {
             repository.saveAppTheme(theme)
+        }
+    }
+
+    fun setDynamicColor(isDynamic: Boolean) {
+        viewModelScope.launch {
+            repository.saveDynamicColor(isDynamic)
         }
     }
 }

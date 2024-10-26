@@ -34,6 +34,8 @@ fun SearchScreen(
     val uiState by viewModel.state.collectAsState()
     val state = uiState
 
+    // Add Event Listener when error occurred
+
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {

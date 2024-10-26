@@ -201,4 +201,10 @@ class Repository @Inject constructor(
 
     fun getAppTheme(): Flow<Theme> = datastore.appThemeFlow
 
+    suspend fun saveDynamicColor(value: Boolean) {
+        datastore.setDynamicColor(value)
+    }
+
+    fun getDynamicColor(): Flow<Boolean> = datastore.dynamicColorFlow
+
 }

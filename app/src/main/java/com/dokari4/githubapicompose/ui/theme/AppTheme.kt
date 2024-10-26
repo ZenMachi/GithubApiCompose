@@ -1,6 +1,5 @@
 package com.dokari4.githubapicompose.ui.theme
 
-import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -15,6 +14,7 @@ fun AppTheme(
     content: @Composable () -> Unit
 ) {
     val theme by settingsViewModel.theme.collectAsState()
+    val isDynamicColorEnabled by settingsViewModel.isDynamicColor.collectAsState()
 
     val darkTheme = when (theme) {
         Theme.AUTO -> isSystemInDarkTheme()
@@ -23,7 +23,8 @@ fun AppTheme(
     }
 
     GithubApiComposeTheme(
-        darkTheme = darkTheme
+        darkTheme = darkTheme,
+        dynamicColor = isDynamicColorEnabled
     ) {
         content()
     }
