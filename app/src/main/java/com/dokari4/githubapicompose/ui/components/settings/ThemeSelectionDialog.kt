@@ -22,9 +22,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.dokari4.githubapicompose.data.local.Theme
+import com.dokari4.githubapicompose.ui.theme.GithubApiComposeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -88,5 +90,17 @@ fun ThemeSelectionDialog(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PreviewThemeSelectionDialog() {
+    GithubApiComposeTheme {
+        ThemeSelectionDialog(
+            currentTheme = Theme.AUTO,
+            onThemeSelected = {},
+            onDismissRequest = {}
+        )
     }
 }

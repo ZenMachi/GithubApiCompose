@@ -24,7 +24,7 @@ import com.dokari4.githubapicompose.ui.components.CardItem
 import com.dokari4.githubapicompose.ui.components.ShowProgressBar
 import com.dokari4.githubapicompose.ui.components.TextSearchBar
 import com.dokari4.githubapicompose.ui.components.search.EmptyContent
-import com.dokari4.githubapicompose.ui.components.search.ErrorContent
+import com.dokari4.githubapicompose.ui.components.error.ErrorContent
 
 @Composable
 fun SearchScreen(
@@ -76,7 +76,12 @@ fun SearchScreen(
                 }
             }
 
-            is UIState.Error -> ErrorContent(state.errorMessage)
+            is UIState.Error -> ErrorContent(
+                errorMessage = state.errorMessage,
+                onClickRetry = { },
+                isButtonEnabled = false,
+                textButton = ""
+            )
 
             UIState.Empty -> EmptyContent()
         }

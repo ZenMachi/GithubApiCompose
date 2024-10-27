@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.dokari4.githubapicompose.MainScreen
+import com.dokari4.githubapicompose.ui.MainScreen
 import com.dokari4.githubapicompose.ui.detail.DetailScreen
 
 @Composable

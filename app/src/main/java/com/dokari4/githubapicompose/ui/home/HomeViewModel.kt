@@ -23,7 +23,7 @@ class HomeViewModel @Inject constructor(
         getUsers()
     }
 
-    private fun getUsers() {
+    fun getUsers() {
         viewModelScope.launch {
             val response = repository.fetchUsers()
             response.collect {

@@ -1,4 +1,4 @@
-package com.dokari4.githubapicompose.ui.components
+package com.dokari4.githubapicompose.utils
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow

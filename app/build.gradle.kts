@@ -74,9 +74,10 @@ dependencies {
     implementation(libs.bundles.network)
     //Kotlin Serializable
     implementation(libs.kotlinx.serialization.json)
+    // Google Fonts
+    implementation(libs.androidx.ui.text.google.fonts)
     //Hilt
     implementation (libs.hilt.android)
-    implementation(libs.androidx.ui.text.google.fonts)
     ksp (libs.hilt.android.compiler)
     implementation (libs.androidx.hilt.navigation.compose)
     // DataStore

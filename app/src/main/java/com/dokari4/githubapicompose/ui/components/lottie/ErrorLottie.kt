@@ -2,6 +2,7 @@ package com.dokari4.githubapicompose.ui.components.lottie
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.tooling.preview.Preview
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -24,4 +25,10 @@ fun ErrorLottie(isPlaying: Boolean = true) {
             progress
         }
     )
+}
+
+@Preview
+@Composable
+private fun ErrorLottiePreview() {
+    ErrorLottie()
 }

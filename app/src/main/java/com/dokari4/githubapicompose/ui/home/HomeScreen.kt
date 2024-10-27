@@ -25,10 +25,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.dokari4.githubapicompose.ui.UIState
 import com.dokari4.githubapicompose.ui.components.CardItem
 import com.dokari4.githubapicompose.ui.components.ShowProgressBar
-import com.dokari4.githubapicompose.ui.components.SnackbarController
-import com.dokari4.githubapicompose.ui.components.SnackbarEvent
+import com.dokari4.githubapicompose.ui.components.error.ErrorContent
+import com.dokari4.githubapicompose.utils.SnackbarController
+import com.dokari4.githubapicompose.utils.SnackbarEvent
 import com.dokari4.githubapicompose.ui.components.lottie.ErrorLottie
-import com.dokari4.githubapicompose.ui.components.lottie.NotFoundLottie
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -85,22 +85,11 @@ fun HomeScreen(
                         )
                     )
                 }
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .width(200.dp)
-                            .height(200.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        ErrorLottie()
-                    }
-                    Text(text = state.errorMessage, textAlign = TextAlign.Center)
-                }
+                ErrorContent(
+                    errorMessage = state.errorMessage,
+                    onClickRetry = { viewModel.getUsers() },
+                    textButton = "Retry"
+                )
             }
 
             UIState.Empty -> {}

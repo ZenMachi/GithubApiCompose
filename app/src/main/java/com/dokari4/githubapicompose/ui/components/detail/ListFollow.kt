@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dokari4.githubapicompose.data.remote.dto.UserDto
 import com.dokari4.githubapicompose.ui.components.CardItem
@@ -47,4 +48,22 @@ fun ListFollow(
             )
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ListFollowPreview() {
+    ListFollow(
+        listUser = listOf(
+            UserDto(
+                id = 1,
+                idName = "",
+                avatar = "",
+                url = ""
+            )
+        ),
+        isLoading = false,
+        onNavigate = {}
+    )
+
 }

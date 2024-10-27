@@ -20,10 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.dokari4.githubapicompose.ui.components.StatsItem
 import com.dokari4.githubapicompose.utils.formatNumber
 
 @Composable
@@ -82,4 +82,16 @@ fun ProfileBar(
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ProfileBarPreview() {
+    ProfileBar(
+        photoUrl = "",
+        name = "Dokari4",
+        repoCount = 10,
+        followerCount = 100,
+        followingCount = 1000
+    )
 }

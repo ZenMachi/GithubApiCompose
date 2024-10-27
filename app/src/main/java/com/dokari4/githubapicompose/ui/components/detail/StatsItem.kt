@@ -1,4 +1,4 @@
-package com.dokari4.githubapicompose.ui.components
+package com.dokari4.githubapicompose.ui.components.detail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

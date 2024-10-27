@@ -1,13 +1,10 @@
 package com.dokari4.githubapicompose.ui.detail
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,20 +17,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.dokari4.githubapicompose.ui.UIState
-import com.dokari4.githubapicompose.ui.components.Bio
 import com.dokari4.githubapicompose.ui.components.ShowProgressBar
+import com.dokari4.githubapicompose.ui.components.detail.Bio
 import com.dokari4.githubapicompose.ui.components.detail.FollowTabRow
 import com.dokari4.githubapicompose.ui.components.detail.ProfileBar
-import com.dokari4.githubapicompose.ui.components.lottie.ErrorLottie
+import com.dokari4.githubapicompose.ui.components.error.ErrorContent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -132,22 +127,44 @@ fun DetailScreen(
         }
 
         is UIState.Error -> {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Box(
-                    modifier = Modifier
-                        .width(200.dp)
-                        .height(200.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    ErrorLottie()
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = { },
+                        navigationIcon = {
+                            IconButton(
+                                onClick = {
+                                    /*
+                                    *  This lifecycle checking prevent app blank
+                                    *  when user click back button rapidly
+                                    * */
+                                    if (
+                                        localLifecycleOwner.lifecycle.currentState
+                                        < Lifecycle.State.RESUMED
+                                    )
+                                        return@IconButton
+                                    onBackClick()
+                                }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                    contentDescription = "Back"
+                                )
+                            }
+                        }
+                    )
                 }
-                Text(text = detailUserState.errorMessage, textAlign = TextAlign.Center)
+            ) { paddingValues ->
+               ErrorContent(
+                   modifier = Modifier.padding(paddingValues),
+                   errorMessage = detailUserState.errorMessage,
+                   onClickRetry = {
+                       viewModel.getDetailUser(username)
+                   },
+                   textButton = "Retry"
+               )
             }
+
         }
 
         UIState.Empty -> {

@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dokari4.githubapicompose.ui.components.lottie.NotFoundLottie
 
@@ -32,4 +33,10 @@ fun EmptyContent() {
         }
         Text(text = "Users Not Found", textAlign = TextAlign.Center)
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun EmptyContentPreview() {
+    EmptyContent()
 }
