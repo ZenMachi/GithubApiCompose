@@ -20,10 +20,6 @@ class Repository @Inject constructor(
     private val apiService: ApiService,
     private val datastore: DatastoreManager
 ) {
-    /*
-    TODO:   All Exception Should be handled it on NetworkDataSource
-            On Repo must be only catch Throwable
-    */
     fun fetchUsers(): Flow<ApiResponse<List<UserDto>>> {
         return flow {
             emit(ApiResponse.Loading)

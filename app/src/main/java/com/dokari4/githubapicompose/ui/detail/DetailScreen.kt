@@ -53,7 +53,6 @@ fun DetailScreen(
         viewModel.getFollowingUser(username)
         viewModel.getFollowersUser(username)
     }
-    //TODO: Always Use Scaffold and handle error with lottie animation
     when (detailUserState) {
         UIState.Initial, UIState.Loading -> ShowProgressBar()
         is UIState.Success -> {
