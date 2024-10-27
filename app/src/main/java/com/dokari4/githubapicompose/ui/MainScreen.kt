@@ -57,6 +57,7 @@ fun MainScreen(
         }
     }
 
+    // TODO: Add FavoriteScreen BottomNavItem
     val listOfBottomNavItem = listOf(
         BottomNavItem(
             route = Routes.MainScreen.HomeScreen,
