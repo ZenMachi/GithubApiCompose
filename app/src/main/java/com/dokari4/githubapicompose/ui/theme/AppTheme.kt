@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.dokari4.githubapicompose.data.local.Theme
+import com.dokari4.githubapicompose.utils.Theme
 import com.dokari4.githubapicompose.ui.settings.SettingsViewModel
 
 @Composable

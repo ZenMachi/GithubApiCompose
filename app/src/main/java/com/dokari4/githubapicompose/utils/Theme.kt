@@ -1,4 +1,4 @@
-package com.dokari4.githubapicompose.data.local
+package com.dokari4.githubapicompose.utils
 
 enum class Theme(val displayName: String, val value: Int) {
     AUTO("System Default", 0),

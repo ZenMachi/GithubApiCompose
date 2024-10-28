@@ -16,18 +16,18 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.dokari4.githubapicompose.ui.components.BottomNavItem
-import com.dokari4.githubapicompose.ui.components.BottomNavigationBar
+import com.dokari4.githubapicompose.ui.components.common.BottomNavItem
+import com.dokari4.githubapicompose.ui.components.common.MainAppBar
+import com.dokari4.githubapicompose.ui.components.common.CustomBottomBar
 import com.dokari4.githubapicompose.utils.ObserveAsEvents
 import com.dokari4.githubapicompose.utils.SnackbarController
 import com.dokari4.githubapicompose.ui.navigation.MainNavGraph
@@ -40,6 +40,7 @@ import kotlinx.coroutines.launch
 fun MainScreen(
     rootNavController: NavHostController,
     navController: NavHostController = rememberNavController(),
+    onNavigateFavorites: () -> Unit
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -55,9 +56,11 @@ fun MainScreen(
             Routes.MainScreen.SettingScreen::class.qualifiedName -> "Settings"
             else -> "Other"
         }
-    }
+    } ?: "Other"
+    val isHomeScreen = currentDestination?.hierarchy?.any {
+        it.route == Routes.MainScreen.HomeScreen::class.qualifiedName
+    } ?: false
 
-    // TODO: Add FavoriteScreen BottomNavItem
     val listOfBottomNavItem = listOf(
         BottomNavItem(
             route = Routes.MainScreen.HomeScreen,
@@ -101,10 +104,14 @@ fun MainScreen(
             SnackbarHost(hostState = snackbarHostState)
         },
         topBar = {
-            TopAppBar(title = { Text(text = title.toString()) })
+            MainAppBar(
+                title = title,
+                isHomeScreen = isHomeScreen,
+                onNavigateFavorites = onNavigateFavorites
+            )
         },
         bottomBar = {
-            BottomNavigationBar(listOfBottomNavItem, navController)
+            CustomBottomBar(listOfBottomNavItem, navController)
         }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {

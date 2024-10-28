@@ -2,6 +2,7 @@ package com.dokari4.githubapicompose.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -9,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.dokari4.githubapicompose.ui.MainScreen
 import com.dokari4.githubapicompose.ui.detail.DetailScreen
+import com.dokari4.githubapicompose.ui.favorite.FavoriteScreen
 
 @Composable
 fun AppNavGraph(
@@ -21,7 +23,12 @@ fun AppNavGraph(
         modifier = modifier
     ) {
         composable<Routes.MainScreen> {
-            MainScreen(rootNavController = navController)
+            MainScreen(
+                rootNavController = navController,
+                onNavigateFavorites = {
+                    navController.navigate(Routes.FavoritesScreen)
+                }
+            )
         }
 
         composable<Routes.DetailScreen> {
@@ -38,6 +45,14 @@ fun AppNavGraph(
                 * */
                 onBackClick = { navController.popBackStack() },
                 onNavigateToDetailScreen = { username ->
+                    navController.navigate(Routes.DetailScreen(username))
+                }
+            )
+        }
+        composable<Routes.FavoritesScreen> {
+            FavoriteScreen(
+                onBackClick = { navController.popBackStack() },
+                onCardClick = { username ->
                     navController.navigate(Routes.DetailScreen(username))
                 }
             )

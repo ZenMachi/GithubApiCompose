@@ -25,7 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import com.dokari4.githubapicompose.data.local.Theme
+import com.dokari4.githubapicompose.utils.Theme
 import com.dokari4.githubapicompose.ui.theme.GithubApiComposeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)

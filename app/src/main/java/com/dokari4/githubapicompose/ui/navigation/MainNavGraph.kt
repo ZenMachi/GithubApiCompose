@@ -36,8 +36,8 @@ fun MainNavGraph(
         }
         composable<Routes.MainScreen.SearchScreen> {
             SearchScreen(
-                onCardClick = {
-                    rootNavController.navigate(Routes.DetailScreen(it)) {
+                onCardClick = { username ->
+                    rootNavController.navigate(Routes.DetailScreen(username)) {
                         launchSingleTop = true
                         restoreState = true
                         popUpTo(navController.graph.findStartDestination().id) {

@@ -3,7 +3,7 @@ package com.dokari4.githubapicompose.ui.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dokari4.githubapicompose.data.Repository
-import com.dokari4.githubapicompose.data.local.Theme
+import com.dokari4.githubapicompose.utils.Theme
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

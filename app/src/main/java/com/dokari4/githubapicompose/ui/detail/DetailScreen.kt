@@ -1,5 +1,6 @@
 package com.dokari4.githubapicompose.ui.detail
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -7,7 +8,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -24,7 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.dokari4.githubapicompose.ui.UIState
-import com.dokari4.githubapicompose.ui.components.ShowProgressBar
+import com.dokari4.githubapicompose.ui.components.common.ShowProgressBar
 import com.dokari4.githubapicompose.ui.components.detail.Bio
 import com.dokari4.githubapicompose.ui.components.detail.FollowTabRow
 import com.dokari4.githubapicompose.ui.components.detail.ProfileBar
@@ -41,6 +46,7 @@ fun DetailScreen(
     val detailUserUiState by viewModel.detailUserState.collectAsState()
     val followersUiState by viewModel.followersUserState.collectAsState()
     val followingUiState by viewModel.followingUserState.collectAsState()
+    val isFavoriteUiState by viewModel.isFavoriteState.collectAsState()
 
     val detailUserState = detailUserUiState
     val followersState = followersUiState
@@ -52,6 +58,7 @@ fun DetailScreen(
         viewModel.getDetailUser(username)
         viewModel.getFollowingUser(username)
         viewModel.getFollowersUser(username)
+        viewModel.isFavorite(username)
     }
     when (detailUserState) {
         UIState.Initial, UIState.Loading -> ShowProgressBar()
@@ -86,6 +93,30 @@ fun DetailScreen(
                             }
                         }
                     )
+                },
+                floatingActionButton = {
+                    FloatingActionButton(
+                        onClick = {
+                            if (!isFavoriteUiState) {
+                                viewModel.setFavorite(data)
+                                viewModel.changeFavoriteState(state = true)
+                                Log.d("Favorite", "Favorite Added")
+                            } else {
+                                viewModel.deleteFavorite(data.id)
+                                viewModel.changeFavoriteState(false)
+                                Log.d("Favorite", "Favorite Deleted")
+                            }
+                        }
+                    ) {
+                        Icon(
+                            imageVector = if (isFavoriteUiState) {
+                                Icons.Default.Favorite
+                            } else {
+                                Icons.Default.FavoriteBorder
+                            },
+                            contentDescription = "Toggle Favorite"
+                        )
+                    }
                 }
             ) { innerPadding ->
                 val listFollowers = if (followersState is UIState.Success) {
@@ -154,14 +185,14 @@ fun DetailScreen(
                     )
                 }
             ) { paddingValues ->
-               ErrorContent(
-                   modifier = Modifier.padding(paddingValues),
-                   errorMessage = detailUserState.errorMessage,
-                   onClickRetry = {
-                       viewModel.getDetailUser(username)
-                   },
-                   textButton = "Retry"
-               )
+                ErrorContent(
+                    modifier = Modifier.padding(paddingValues),
+                    errorMessage = detailUserState.errorMessage,
+                    onClickRetry = {
+                        viewModel.getDetailUser(username)
+                    },
+                    textButton = "Retry"
+                )
             }
 
         }

@@ -1,8 +1,10 @@
 package com.dokari4.githubapicompose.data
 
 import android.util.Log
-import com.dokari4.githubapicompose.data.local.DatastoreManager
-import com.dokari4.githubapicompose.data.local.Theme
+import com.dokari4.githubapicompose.data.local.database.FavoriteDao
+import com.dokari4.githubapicompose.data.local.datastore.DatastoreManager
+import com.dokari4.githubapicompose.data.local.model.FavoriteEntity
+import com.dokari4.githubapicompose.utils.Theme
 import com.dokari4.githubapicompose.data.remote.dto.DetailUserDto
 import com.dokari4.githubapicompose.data.remote.dto.SearchUserDto
 import com.dokari4.githubapicompose.data.remote.dto.UserDto
@@ -18,7 +20,8 @@ import javax.inject.Singleton
 @Singleton
 class Repository @Inject constructor(
     private val apiService: ApiService,
-    private val datastore: DatastoreManager
+    private val datastore: DatastoreManager,
+    private val dao: FavoriteDao
 ) {
     fun fetchUsers(): Flow<ApiResponse<List<UserDto>>> {
         return flow {
@@ -203,4 +206,30 @@ class Repository @Inject constructor(
 
     fun getDynamicColor(): Flow<Boolean> = datastore.dynamicColorFlow
 
+    fun getFavoriteUsers(): Flow<List<FavoriteEntity>> {
+        return flow {
+            val entity = dao.getFavoritesList()
+            emit(entity)
+        }
+    }
+
+    suspend fun addFavorite(data: DetailUserDto) {
+        val entity = FavoriteEntity(
+            userId = data.id,
+            username = data.login,
+            avatarUrl = data.avatarUrl
+        )
+        dao.insertFavorite(entity)
+    }
+
+    suspend fun deleteFavorite(userId: Int) {
+        dao.deleteFavorite(userId)
+    }
+
+    fun isFavorite(username: String): Flow<Boolean> {
+        return flow {
+            val isFavorite = dao.checkFavorite(username)
+            emit(isFavorite)
+        }
+    }
 }

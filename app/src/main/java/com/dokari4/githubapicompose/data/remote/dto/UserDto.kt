@@ -6,9 +6,9 @@ data class UserDto(
     @field:SerializedName("id")
     val id: Int,
     @field:SerializedName("avatar_url")
-    val avatar: String,
+    val avatarUrl: String,
     @field:SerializedName("login")
-    val idName: String,
+    val login: String,
     @field:SerializedName("url")
     val url: String
 )

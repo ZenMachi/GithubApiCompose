@@ -8,10 +8,12 @@ import com.dokari4.githubapicompose.data.remote.dto.UserDto
 import com.dokari4.githubapicompose.data.remote.network.ApiResponse
 import com.dokari4.githubapicompose.ui.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,6 +28,9 @@ class DetailViewModel @Inject constructor(
 
     private val _followersUserState = MutableStateFlow<UIState<List<UserDto>>>(UIState.Loading)
     val followersUserState = _followersUserState.asStateFlow()
+
+    private val _isFavoriteState = MutableStateFlow(false)
+    val isFavoriteState = _isFavoriteState.asStateFlow()
 
     fun getDetailUser(username: String) {
         viewModelScope.launch {
@@ -49,6 +54,32 @@ class DetailViewModel @Inject constructor(
                 repository.fetchFollowing(username)
             }
         }
+    }
+
+    fun isFavorite(username: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.isFavorite(username).collect {
+                withContext(Dispatchers.Main) {
+                    _isFavoriteState.value = it
+                }
+            }
+        }
+    }
+
+    fun setFavorite(data: DetailUserDto) {
+        viewModelScope.launch {
+            repository.addFavorite(data)
+        }
+    }
+
+    fun deleteFavorite(userId: Int) {
+        viewModelScope.launch {
+            repository.deleteFavorite(userId)
+        }
+    }
+
+    fun changeFavoriteState(state: Boolean) {
+        _isFavoriteState.value = state
     }
 
     private fun <T> fetchUserData(

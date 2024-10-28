@@ -1,4 +1,4 @@
-package com.dokari4.githubapicompose.ui.components
+package com.dokari4.githubapicompose.ui.components.common
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -13,7 +13,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
-fun BottomNavigationBar(items: List<BottomNavItem>, navController: NavHostController) {
+fun CustomBottomBar(items: List<BottomNavItem>, navController: NavHostController) {
     NavigationBar {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination

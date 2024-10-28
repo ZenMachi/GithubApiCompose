@@ -72,20 +72,24 @@ dependencies {
     implementation(libs.bundles.navigation)
     // Network Bundles
     implementation(libs.bundles.network)
-    //Kotlin Serializable
+    // Kotlin Serializable
     implementation(libs.kotlinx.serialization.json)
     // Google Fonts
     implementation(libs.androidx.ui.text.google.fonts)
-    //Hilt
+    // Hilt
     implementation (libs.hilt.android)
     ksp (libs.hilt.android.compiler)
     implementation (libs.androidx.hilt.navigation.compose)
     // DataStore
     implementation(libs.androidx.datastore.preferences)
-    //Coil Bundles
+    // Coil Bundles
     implementation(libs.bundles.coil)
-    //Lottie
+    // Lottie
     implementation(libs.lottie.compose)
+    // Room
+    implementation (libs.room.runtime)
+    ksp (libs.room.compiler)
+    implementation (libs.room.ktx)
     // Testing Libs
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -20,9 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.dokari4.githubapicompose.ui.UIState
-import com.dokari4.githubapicompose.ui.components.CardItem
-import com.dokari4.githubapicompose.ui.components.ShowProgressBar
-import com.dokari4.githubapicompose.ui.components.TextSearchBar
+import com.dokari4.githubapicompose.ui.components.common.CardItem
+import com.dokari4.githubapicompose.ui.components.common.ShowProgressBar
+import com.dokari4.githubapicompose.ui.components.common.TextSearchBar
 import com.dokari4.githubapicompose.ui.components.search.EmptyContent
 import com.dokari4.githubapicompose.ui.components.error.ErrorContent
 
@@ -69,8 +69,9 @@ fun SearchScreen(
                                 .padding(horizontal = 16.dp)
                                 .padding(bottom = lastPadding)
                                 .fillMaxWidth()
-                                .clickable(onClick = { onCardClick(data.idName) }),
-                            data = data
+                                .clickable(onClick = { onCardClick(data.login) }),
+                            avatarUrl = data.avatarUrl,
+                            username = data.login
                         )
                     }
                 }

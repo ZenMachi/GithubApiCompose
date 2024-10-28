@@ -1,4 +1,4 @@
-package com.dokari4.githubapicompose.ui.components
+package com.dokari4.githubapicompose.ui.components.common
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,10 +15,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.dokari4.githubapicompose.R
-import com.dokari4.githubapicompose.data.remote.dto.UserDto
 
 @Composable
-fun CardItem(modifier: Modifier = Modifier, data: UserDto) {
+fun CardItem(
+    modifier: Modifier = Modifier,
+    avatarUrl: String,
+    username: String,
+) {
 
     Card(
         modifier = modifier
@@ -31,11 +34,11 @@ fun CardItem(modifier: Modifier = Modifier, data: UserDto) {
                 modifier = Modifier.height(72.dp),
                 contentScale = ContentScale.Fit,
                 placeholder = painterResource(R.drawable.ic_launcher_background),
-                model = data.avatar,
-                contentDescription = "Photo of ${data.idName}"
+                model = avatarUrl,
+                contentDescription = "Photo of $username"
             )
             Spacer(Modifier.width(8.dp))
-            Text(text = data.idName)
+            Text(text = username)
         }
     }
 }

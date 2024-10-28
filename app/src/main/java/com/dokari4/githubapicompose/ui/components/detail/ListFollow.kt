@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dokari4.githubapicompose.data.remote.dto.UserDto
-import com.dokari4.githubapicompose.ui.components.CardItem
-import com.dokari4.githubapicompose.ui.components.ShowProgressBar
+import com.dokari4.githubapicompose.ui.components.common.CardItem
+import com.dokari4.githubapicompose.ui.components.common.ShowProgressBar
 
 @Composable
 fun ListFollow(
@@ -43,8 +43,9 @@ fun ListFollow(
                     .padding(horizontal = 16.dp)
                     .padding(top = firstItem)
                     .fillMaxWidth()
-                    .clickable { onNavigate(data.idName) },
-                data = data
+                    .clickable { onNavigate(data.login) },
+                avatarUrl = data.avatarUrl,
+                username = data.login
             )
         }
     }
@@ -57,8 +58,8 @@ private fun ListFollowPreview() {
         listUser = listOf(
             UserDto(
                 id = 1,
-                idName = "",
-                avatar = "",
+                login = "",
+                avatarUrl = "",
                 url = ""
             )
         ),

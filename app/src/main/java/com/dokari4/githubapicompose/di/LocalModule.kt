@@ -1,7 +1,10 @@
 package com.dokari4.githubapicompose.di
 
 import android.content.Context
-import com.dokari4.githubapicompose.data.local.DatastoreManager
+import androidx.room.Room
+import com.dokari4.githubapicompose.data.local.database.AppDatabase
+import com.dokari4.githubapicompose.data.local.database.FavoriteDao
+import com.dokari4.githubapicompose.data.local.datastore.DatastoreManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,5 +20,20 @@ object LocalModule {
     @Singleton
     fun provideDatastore(@ApplicationContext context: Context): DatastoreManager = DatastoreManager(context)
 
-    //TODO: Implement Room Dependency Injection
+    @Provides
+    @Singleton
+    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "app_database"
+        )
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserDao(database: AppDatabase): FavoriteDao = database.favoriteDao()
+
 }
