@@ -10,7 +10,6 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -26,15 +25,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.dokari4.githubapicompose.ui.components.common.BottomNavItem
-import com.dokari4.githubapicompose.ui.components.common.MainAppBar
 import com.dokari4.githubapicompose.ui.components.common.CustomBottomBar
-import com.dokari4.githubapicompose.utils.ObserveAsEvents
-import com.dokari4.githubapicompose.utils.SnackbarController
+import com.dokari4.githubapicompose.ui.components.common.MainAppBar
 import com.dokari4.githubapicompose.ui.navigation.MainNavGraph
 import com.dokari4.githubapicompose.ui.navigation.Routes
+import com.dokari4.githubapicompose.utils.ObserveAsEvents
+import com.dokari4.githubapicompose.utils.SnackbarController
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreen(

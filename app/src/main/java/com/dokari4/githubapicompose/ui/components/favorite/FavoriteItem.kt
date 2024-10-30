@@ -1,6 +1,5 @@
 package com.dokari4.githubapicompose.ui.components.favorite
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeOut
@@ -13,11 +12,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import com.dokari4.githubapicompose.data.local.model.FavoriteEntity
 import com.dokari4.githubapicompose.ui.components.common.CardItem
 import kotlinx.coroutines.delay

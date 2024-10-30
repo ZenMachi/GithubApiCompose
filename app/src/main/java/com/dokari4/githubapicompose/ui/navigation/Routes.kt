@@ -3,18 +3,18 @@ package com.dokari4.githubapicompose.ui.navigation
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class Routes(val route: String) {
+sealed class Routes {
     @Serializable
-    data object MainScreen : Routes("main") {
+    data object MainScreen : Routes() {
         @Serializable
-        data object HomeScreen : Routes("home")
+        data object HomeScreen : Routes()
         @Serializable
-        data object SearchScreen : Routes("search")
+        data object SearchScreen : Routes()
         @Serializable
-        data object SettingScreen : Routes("setting")
+        data object SettingScreen : Routes()
     }
     @Serializable
-    data class DetailScreen(val username: String) : Routes("detail")
+    data class DetailScreen(val username: String) : Routes()
     @Serializable
-    data object FavoritesScreen : Routes("favorites")
+    data object FavoritesScreen : Routes()
 }
