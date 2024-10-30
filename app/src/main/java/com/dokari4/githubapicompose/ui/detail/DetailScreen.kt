@@ -81,8 +81,7 @@ fun DetailScreen(
                                     if (
                                         localLifecycleOwner.lifecycle.currentState
                                         < Lifecycle.State.RESUMED
-                                    )
-                                        return@IconButton
+                                    ) return@IconButton
                                     onBackClick()
                                 }
                             ) {
@@ -99,12 +98,8 @@ fun DetailScreen(
                         onClick = {
                             if (!isFavoriteUiState) {
                                 viewModel.setFavorite(data)
-                                viewModel.changeFavoriteState(state = true)
-                                Log.d("Favorite", "Favorite Added")
                             } else {
                                 viewModel.deleteFavorite(data.id)
-                                viewModel.changeFavoriteState(false)
-                                Log.d("Favorite", "Favorite Deleted")
                             }
                         }
                     ) {

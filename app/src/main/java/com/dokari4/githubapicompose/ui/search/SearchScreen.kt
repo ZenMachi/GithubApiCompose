@@ -23,7 +23,7 @@ import com.dokari4.githubapicompose.ui.UIState
 import com.dokari4.githubapicompose.ui.components.common.CardItem
 import com.dokari4.githubapicompose.ui.components.common.ShowProgressBar
 import com.dokari4.githubapicompose.ui.components.common.TextSearchBar
-import com.dokari4.githubapicompose.ui.components.search.EmptyContent
+import com.dokari4.githubapicompose.ui.components.empty.EmptyContent
 import com.dokari4.githubapicompose.ui.components.error.ErrorContent
 
 @Composable
@@ -84,7 +84,7 @@ fun SearchScreen(
                 textButton = ""
             )
 
-            UIState.Empty -> EmptyContent()
+            UIState.Empty -> EmptyContent("No User Found")
         }
     }
 }

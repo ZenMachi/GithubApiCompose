@@ -5,11 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.dokari4.githubapicompose.data.Repository
 import com.dokari4.githubapicompose.data.local.model.FavoriteEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,18 +23,18 @@ class FavoritesViewModel @Inject constructor(
     }
 
     private fun getFavorites() {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.getFavoriteUsers().collect() {
-                withContext(Dispatchers.Main) {
-                    _state.value = it
-                }
+        viewModelScope.launch {
+            repository.getFavoriteUsers().collect { data ->
+               _state.update {
+                   data
+               }
             }
         }
     }
 
-    fun deleteFavorite(userId: Int) {
+    fun deleteFavorite(item: FavoriteEntity) {
         viewModelScope.launch {
-            repository.deleteFavorite(userId)
+            repository.deleteFavorite(item.userId)
         }
     }
 }

@@ -57,11 +57,9 @@ class DetailViewModel @Inject constructor(
     }
 
     fun isFavorite(username: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             repository.isFavorite(username).collect {
-                withContext(Dispatchers.Main) {
-                    _isFavoriteState.value = it
-                }
+                _isFavoriteState.value = it
             }
         }
     }
@@ -76,10 +74,6 @@ class DetailViewModel @Inject constructor(
         viewModelScope.launch {
             repository.deleteFavorite(userId)
         }
-    }
-
-    fun changeFavoriteState(state: Boolean) {
-        _isFavoriteState.value = state
     }
 
     private fun <T> fetchUserData(

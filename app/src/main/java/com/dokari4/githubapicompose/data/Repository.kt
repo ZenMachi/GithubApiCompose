@@ -206,12 +206,7 @@ class Repository @Inject constructor(
 
     fun getDynamicColor(): Flow<Boolean> = datastore.dynamicColorFlow
 
-    fun getFavoriteUsers(): Flow<List<FavoriteEntity>> {
-        return flow {
-            val entity = dao.getFavoritesList()
-            emit(entity)
-        }
-    }
+    fun getFavoriteUsers(): Flow<List<FavoriteEntity>> = dao.getFavoritesList()
 
     suspend fun addFavorite(data: DetailUserDto) {
         val entity = FavoriteEntity(
@@ -226,10 +221,5 @@ class Repository @Inject constructor(
         dao.deleteFavorite(userId)
     }
 
-    fun isFavorite(username: String): Flow<Boolean> {
-        return flow {
-            val isFavorite = dao.checkFavorite(username)
-            emit(isFavorite)
-        }
-    }
+    fun isFavorite(username: String): Flow<Boolean> = dao.checkFavorite(username)
 }

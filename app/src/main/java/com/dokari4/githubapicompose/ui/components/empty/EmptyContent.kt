@@ -1,4 +1,4 @@
-package com.dokari4.githubapicompose.ui.components.search
+package com.dokari4.githubapicompose.ui.components.empty
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,7 +16,9 @@ import androidx.compose.ui.unit.dp
 import com.dokari4.githubapicompose.ui.components.lottie.NotFoundLottie
 
 @Composable
-fun EmptyContent() {
+fun EmptyContent(
+    emptyMessage: String
+) {
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -31,12 +33,12 @@ fun EmptyContent() {
         ) {
             NotFoundLottie()
         }
-        Text(text = "Users Not Found", textAlign = TextAlign.Center)
+        Text(text = emptyMessage, textAlign = TextAlign.Center)
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun EmptyContentPreview() {
-    EmptyContent()
+    EmptyContent("No Data Found")
 }
