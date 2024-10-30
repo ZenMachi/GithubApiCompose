@@ -14,8 +14,10 @@ To run this project, you will need to add the following environment variables to
 
 ## Screenshots
 
-<img src="https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png" height="50%"/>
-![Logo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png)
+| <img src="screenshots/Screenshot_1730283419.png" width= "200" /> | <img src="screenshots/Screenshot_1730283438.png" width= "200" /> |
+| :--------------------------------------------------------------: | :--------------------------------------------------------------: |
+|                             Home                                 |                             Detail User                          |
 
-Insert gif or link to demo
-
+| <img src="screenshots/Screenshot_1730283431.png" width= "200" /> | <img src="screenshots/Screenshot_1730283469.png" width= "200" /> | <img src="screenshots/Screenshot_1730283476.png" width= "200" /> |
+| :--------------------------------------------------------------: | :--------------------------------------------------------------: | :--------------------------------------------------------------: |
+|                            Favorites                             |                             Search User                          |                             Settings                             |
