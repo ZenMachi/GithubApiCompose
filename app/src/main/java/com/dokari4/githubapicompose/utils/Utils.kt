@@ -10,6 +10,7 @@ const val POWER_OF_TEN_FOR_SUFFIX = 3
 fun formatNumber(number: Long): String {
     if (number == 0L) return "0"
     if (number < 0) return "-" + formatNumber(-number)
+    if (number < 1000) return number.toString()
 
     val suffixIndex = (log10(number.toDouble()) / POWER_OF_TEN_FOR_SUFFIX).toInt()
     val suffix = when (suffixIndex) {
