@@ -31,3 +31,8 @@ To run this project, you will need to add the following environment variables to
 - Dagger & Hilt
 - DataStore
 - Coil
+
+## Technology used
+- Dependency injection
+- MVVM + Repository Pattern
+- 
