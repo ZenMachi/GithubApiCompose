@@ -31,8 +31,9 @@ To run this project, you will need to add the following environment variables to
 - Dagger & Hilt
 - DataStore
 - Coil
+- FreeRASP
 
 ## Technology used
 - Dependency injection
 - MVVM + Repository Pattern
-- 
+- Security checking by FreeRASP
