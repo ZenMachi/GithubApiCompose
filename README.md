@@ -21,3 +21,13 @@ To run this project, you will need to add the following environment variables to
 | <img src="screenshots/Screenshot_1730283431.png" width= "200" /> | <img src="screenshots/Screenshot_1730283469.png" width= "200" /> | <img src="screenshots/Screenshot_1730283476.png" width= "200" /> |
 | :--------------------------------------------------------------: | :--------------------------------------------------------------: | :--------------------------------------------------------------: |
 |                            Favorites                             |                             Search User                          |                             Settings                             |
+
+## Library Used
+- Jetpack Compose
+- Retrofit
+- Room
+- Lottie
+- Google Fonts
+- Dagger & Hilt
+- DataStore
+- Coil
