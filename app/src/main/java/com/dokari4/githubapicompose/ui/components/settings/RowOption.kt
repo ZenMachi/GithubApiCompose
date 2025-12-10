@@ -37,7 +37,8 @@ fun RowOption(
     ) {
         Icon(
             painter = icon,
-            contentDescription = null
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.secondary
         )
         Column {
             Text(text = title)

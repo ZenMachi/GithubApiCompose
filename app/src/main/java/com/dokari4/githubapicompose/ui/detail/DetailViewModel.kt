@@ -7,6 +7,8 @@ import com.dokari4.githubapicompose.data.remote.dto.DetailUserDto
 import com.dokari4.githubapicompose.data.remote.dto.UserDto
 import com.dokari4.githubapicompose.data.remote.network.ApiResponse
 import com.dokari4.githubapicompose.ui.UIState
+import com.dokari4.githubapicompose.utils.SnackbarController
+import com.dokari4.githubapicompose.utils.SnackbarEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -65,12 +67,28 @@ class DetailViewModel @Inject constructor(
     fun setFavorite(data: DetailUserDto) {
         viewModelScope.launch {
             repository.addFavorite(data)
+
+            SnackbarController.sendEvent(
+                event = SnackbarEvent(
+                    message = "User ${data.login} added to favorite",
+                    action = null
+                )
+            )
         }
+
     }
 
     fun deleteFavorite(userId: Int) {
         viewModelScope.launch {
             repository.deleteFavorite(userId)
+
+            SnackbarController.sendEvent(
+                event = SnackbarEvent(
+                    message = "User deleted from favorite",
+                    action = null
+                )
+            )
+
         }
     }
 

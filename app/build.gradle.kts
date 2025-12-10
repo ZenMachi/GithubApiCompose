@@ -8,6 +8,10 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt.android)
+    // Google Services
+    id("com.google.gms.google-services")
+    // Add the Crashlytics Gradle plugin
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -29,11 +33,28 @@ android {
         properties.load(keyStoreFile.inputStream())
 
         val apiKey = properties.getProperty("API_TOKEN") ?: ""
-
+        val certHashBase64 = properties.getProperty("CERT_HASH_BASE64") ?: ""
+        val pkgName = properties.getProperty("PKG_NAME") ?: ""
+        val email = properties.getProperty("EMAIL") ?: ""
         buildConfigField(
             type = "String",
             name =  "API_TOKEN",
             value = apiKey
+        )
+        buildConfigField(
+            type = "String",
+            name =  "CERT_HASH_BASE64",
+            value = certHashBase64
+        )
+        buildConfigField(
+            type = "String",
+            name =  "PKG_NAME",
+            value = pkgName
+        )
+        buildConfigField(
+            type = "String",
+            name =  "EMAIL",
+            value = email
         )
     }
 
@@ -90,6 +111,14 @@ dependencies {
     implementation (libs.room.runtime)
     ksp (libs.room.compiler)
     implementation (libs.room.ktx)
+    // Import the BoM for the Firebase platform
+    implementation(platform("com.google.firebase:firebase-bom:34.1.0"))
+    // Add the dependencies for the Crashlytics NDK and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation("com.google.firebase:firebase-crashlytics-ndk")
+    implementation("com.google.firebase:firebase-analytics")
+    // freeRASP SDK
+    implementation("com.aheaditec.talsec.security:TalsecSecurity-Community:16.0.1")
     // Testing Libs
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

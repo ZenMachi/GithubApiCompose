@@ -14,12 +14,18 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -32,6 +38,9 @@ import com.dokari4.githubapicompose.ui.components.detail.Bio
 import com.dokari4.githubapicompose.ui.components.detail.FollowTabRow
 import com.dokari4.githubapicompose.ui.components.detail.ProfileBar
 import com.dokari4.githubapicompose.ui.components.error.ErrorContent
+import com.dokari4.githubapicompose.utils.ObserveAsEvents
+import com.dokari4.githubapicompose.utils.SnackbarController
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,6 +50,9 @@ fun DetailScreen(
     onBackClick: () -> Unit,
     onNavigateToDetailScreen: (String) -> Unit,
 ) {
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
     val detailUserUiState by viewModel.detailUserState.collectAsState()
     val followersUiState by viewModel.followersUserState.collectAsState()
     val followingUiState by viewModel.followingUserState.collectAsState()
@@ -58,6 +70,24 @@ fun DetailScreen(
         viewModel.getFollowersUser(username)
         viewModel.isFavorite(username)
     }
+
+    ObserveAsEvents(
+        flow = SnackbarController.events,
+        key1 = snackbarHostState
+    ) { event ->
+        scope.launch {
+            snackbarHostState.currentSnackbarData?.dismiss()
+            val result = snackbarHostState.showSnackbar(
+                message = event.message,
+                actionLabel = event.action?.name,
+                duration = SnackbarDuration.Short
+            )
+            if (result == SnackbarResult.ActionPerformed) {
+                event.action?.action?.invoke()
+            }
+        }
+    }
+
     when (detailUserState) {
         UIState.Initial, UIState.Loading -> ShowProgressBar()
         is UIState.Success -> {
@@ -110,7 +140,12 @@ fun DetailScreen(
                             contentDescription = "Toggle Favorite"
                         )
                     }
-                }
+                },
+                snackbarHost = {
+                    SnackbarHost(
+                        hostState = snackbarHostState,
+                    )
+                },
             ) { innerPadding ->
                 val listFollowers = if (followersState is UIState.Success) {
                     followersState.data
